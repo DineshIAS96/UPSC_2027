@@ -1,0 +1,108 @@
+[
+  {
+    "id": "his2",
+    "title": "6th History - Chapter 2",
+    "questions": [
+      {
+        "type": "normal",
+        "question": "What is a manuscript?",
+        "questionHindi": "पांडुलिपि (Manuscript) क्या होती है?",
+        "options": [
+          "A handwritten document",
+          "A printed newspaper",
+          "A stone sculpture",
+          "A metal tool"
+        ],
+        "optionsHindi": [
+          "हाथ से लिखा गया दस्तावेज़",
+          "छपा हुआ समाचार पत्र",
+          "पत्थर की मूर्ति",
+          "धातु का औजार"
+        ],
+        "answer": 0,
+        "explanation": "A manuscript is a document written by hand before the invention of printing.",
+        "explanationHindi": "मुद्रण कला के विकास से पहले हाथ से लिखे गए दस्तावेज़ को पांडुलिपि कहते हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Which material was commonly used for writing ancient manuscripts in India?",
+        "questionHindi": "भारत में प्राचीन पांडुलिपियाँ सामान्यतः किस पर लिखी जाती थीं?",
+        "options": [
+          "Palm leaves",
+          "Plastic sheets",
+          "Glass plates",
+          "Steel sheets"
+        ],
+        "optionsHindi": [
+          "ताड़ के पत्ते",
+          "प्लास्टिक की शीट",
+          "काँच की प्लेट",
+          "स्टील की चादर"
+        ],
+        "answer": 0,
+        "explanation": "Palm leaves and birch bark were widely used for writing manuscripts.",
+        "explanationHindi": "प्राचीन भारत में पांडुलिपियाँ मुख्यतः ताड़ के पत्तों तथा भोजपत्र पर लिखी जाती थीं।"
+      },
+      {
+        "type": "normal",
+        "question": "Which source helps historians know about ancient trade?",
+        "questionHindi": "प्राचीन व्यापार की जानकारी इतिहासकारों को किस स्रोत से मिलती है?",
+        "options": [
+          "Coins",
+          "Television",
+          "Radio",
+          "Mobile phones"
+        ],
+        "optionsHindi": [
+          "सिक्कों से",
+          "टेलीविजन से",
+          "रेडियो से",
+          "मोबाइल फोन से"
+        ],
+        "answer": 0,
+        "explanation": "Coins provide valuable evidence about trade, rulers and economy.",
+        "explanationHindi": "सिक्के व्यापार, शासकों और अर्थव्यवस्था के बारे में महत्वपूर्ण जानकारी देते हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "What do inscriptions mainly provide information about?",
+        "questionHindi": "अभिलेख मुख्यतः किसकी जानकारी प्रदान करते हैं?",
+        "options": [
+          "Kings and important events",
+          "Weather forecast",
+          "Modern technology",
+          "Sports competitions"
+        ],
+        "optionsHindi": [
+          "राजाओं और महत्वपूर्ण घटनाओं की",
+          "मौसम पूर्वानुमान की",
+          "आधुनिक तकनीक की",
+          "खेल प्रतियोगिताओं की"
+        ],
+        "answer": 0,
+        "explanation": "Inscriptions record royal orders, achievements and historical events.",
+        "explanationHindi": "अभिलेखों में राजाज्ञाएँ, उपलब्धियाँ तथा ऐतिहासिक घटनाएँ अंकित होती हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Why do historians compare different historical sources?",
+        "questionHindi": "इतिहासकार विभिन्न ऐतिहासिक स्रोतों की तुलना क्यों करते हैं?",
+        "options": [
+          "To verify the accuracy of information",
+          "To increase the number of books",
+          "To decorate museums",
+          "To make maps colourful"
+        ],
+        "optionsHindi": [
+          "जानकारी की सत्यता की पुष्टि करने के लिए",
+          "पुस्तकों की संख्या बढ़ाने के लिए",
+          "संग्रहालय सजाने के लिए",
+          "मानचित्र रंगीन बनाने के लिए"
+        ],
+        "answer": 0,
+        "explanation": "Comparing multiple sources helps historians reach more reliable conclusions.",
+        "explanationHindi": "विभिन्न स्रोतों की तुलना करने से इतिहासकार अधिक विश्वसनीय निष्कर्ष तक पहुँचते हैं।"
+      }
+    ]
+  }
+]
