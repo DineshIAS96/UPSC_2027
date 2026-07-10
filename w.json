@@ -1,0 +1,108 @@
+[
+  {
+    "id": "eco1",
+    "title": "6th Economics - Chapter 1",
+    "questions": [
+      {
+        "type": "normal",
+        "question": "What is the primary purpose of economic activities?",
+        "questionHindi": "आर्थिक गतिविधियों का मुख्य उद्देश्य क्या है?",
+        "options": [
+          "To satisfy human needs",
+          "To increase pollution",
+          "To reduce population",
+          "To change seasons"
+        ],
+        "optionsHindi": [
+          "मानव आवश्यकताओं की पूर्ति करना",
+          "प्रदूषण बढ़ाना",
+          "जनसंख्या कम करना",
+          "ऋतुओं को बदलना"
+        ],
+        "answer": 0,
+        "explanation": "Economic activities are performed to produce goods and services that satisfy human wants and needs.",
+        "explanationHindi": "आर्थिक गतिविधियाँ वस्तुओं और सेवाओं के उत्पादन के माध्यम से मानव की आवश्यकताओं एवं इच्छाओं की पूर्ति के लिए की जाती हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Which of the following is a basic human need?",
+        "questionHindi": "निम्नलिखित में से कौन-सी मानव की मूलभूत आवश्यकता है?",
+        "options": [
+          "Food",
+          "Gold ornaments",
+          "Luxury car",
+          "Video game"
+        ],
+        "optionsHindi": [
+          "भोजन",
+          "सोने के आभूषण",
+          "लक्ज़री कार",
+          "वीडियो गेम"
+        ],
+        "answer": 0,
+        "explanation": "Food is one of the basic necessities required for survival.",
+        "explanationHindi": "भोजन जीवन निर्वाह के लिए आवश्यक मूलभूत आवश्यकताओं में से एक है।"
+      },
+      {
+        "type": "normal",
+        "question": "What is called the exchange of goods and services?",
+        "questionHindi": "वस्तुओं एवं सेवाओं के आदान-प्रदान को क्या कहा जाता है?",
+        "options": [
+          "Trade",
+          "Transport",
+          "Agriculture",
+          "Communication"
+        ],
+        "optionsHindi": [
+          "व्यापार",
+          "परिवहन",
+          "कृषि",
+          "संचार"
+        ],
+        "answer": 0,
+        "explanation": "Trade refers to the buying, selling and exchange of goods and services.",
+        "explanationHindi": "वस्तुओं एवं सेवाओं की खरीद-बिक्री तथा आदान-प्रदान को व्यापार कहते हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Money is mainly used as a ______.",
+        "questionHindi": "धन (Money) का मुख्य उपयोग किस रूप में किया जाता है?",
+        "options": [
+          "Medium of exchange",
+          "Natural resource",
+          "Means of transport",
+          "Source of energy"
+        ],
+        "optionsHindi": [
+          "विनिमय का माध्यम",
+          "प्राकृतिक संसाधन",
+          "परिवहन का साधन",
+          "ऊर्जा का स्रोत"
+        ],
+        "answer": 0,
+        "explanation": "Money makes buying and selling easier by acting as a medium of exchange.",
+        "explanationHindi": "धन विनिमय का माध्यम बनकर वस्तुओं एवं सेवाओं की खरीद-बिक्री को सरल बनाता है।"
+      },
+      {
+        "type": "normal",
+        "question": "Which sector mainly involves farming and related activities?",
+        "questionHindi": "मुख्यतः खेती और उससे संबंधित कार्य किस क्षेत्र में आते हैं?",
+        "options": [
+          "Primary sector",
+          "Secondary sector",
+          "Tertiary sector",
+          "IT sector"
+        ],
+        "optionsHindi": [
+          "प्राथमिक क्षेत्र",
+          "द्वितीयक क्षेत्र",
+          "तृतीयक क्षेत्र",
+          "आईटी क्षेत्र"
+        ],
+        "answer": 0,
+        "explanation": "The primary sector includes agriculture, animal husbandry, fishing and forestry.",
+        "explanationHindi": "प्राथमिक क्षेत्र में कृषि, पशुपालन, मत्स्य पालन और वानिकी जैसी गतिविधियाँ शामिल होती हैं।"
+      }
+    ]
+  }
+]
