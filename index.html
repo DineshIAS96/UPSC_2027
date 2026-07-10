@@ -3156,6 +3156,15 @@
       return { owner, repo };
     }
 
+    // ✅ Yaha jitne bhi ALAG GitHub repos hain jinke andar sirf JSON files rakhi
+    // hain (jaise "StudyUPSC/TEST_JSON"), unhe yaha list me daal do.
+    // branch khali chhod do to yeh khud repo ka default branch (main/master) dhoond lega.
+    const EXTERNAL_JSON_REPOS = [
+      { owner: "StudyUPSC", repo: "TEST_JSON", branch: "" }
+      // ✅ Agar aage koi aur JSON-only repo banao to yaha ek aur line add kar dena:
+      // { owner: "AnotherUser", repo: "AnotherRepo", branch: "" }
+    ];
+
     const CORRECT_M = 2;
     const WRONG_M = -(2 / 3);
     const TOTAL_Q_REF = 100;
@@ -3542,54 +3551,85 @@
     });
 
     // ════ MULTI-TEST JSON HELPERS ════
-    async function fetchAllTestsJSON() {
-      if (allTestsData.length) return allTestsData; // ek baar load ho gaya to dobara mat karo
-
-      let jsonFileNames = [];
-
-      // ✅ Step A: GitHub API se repo ke root me jitni bhi .json files hain, unki list nikaalo
+    // ✅ Ek repo (owner/repo) ke ANDAR — root + har subfolder me — jitni bhi .json
+    // files hain, sabko recursive tree API se dhoondta hai, fetch karta hai, aur
+    // andar mile valid "tests" ko ek list me nikaal kar deta hai.
+    async function fetchJsonFilesFromRepo(owner, repo, branch) {
+      let merged = [];
       try {
-        const { owner, repo } = getRepoInfoFromLocation();
-        if (owner && repo) {
-          const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/`;
-          const res = await fetch(apiUrl, { cache: "no-store" });
-          if (res.ok) {
-            const list = await res.json();
-            if (Array.isArray(list)) {
-              jsonFileNames = list
-                .filter(f => f.type === "file" && f.name.toLowerCase().endsWith(".json"))
-                .map(f => f.name);
+        // Branch naam nahi diya? to repo ka default branch pata karo (main/master/kuch bhi)
+        let br = branch;
+        if (!br) {
+          try {
+            const infoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { cache: "no-store" });
+            if (infoRes.ok) {
+              const info = await infoRes.json();
+              br = info.default_branch || "main";
+            } else {
+              br = "main";
             }
+          } catch (e) { br = "main"; }
+        }
+
+        // ✅ Recursive tree API — isse root ke saath saath HAR subfolder ke andar
+        // ki files bhi ek hi call me mil jaati hain
+        const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${br}?recursive=1`;
+        const treeRes = await fetch(treeUrl, { cache: "no-store" });
+        if (!treeRes.ok) {
+          console.log(`Tree API fail: ${owner}/${repo}`, treeRes.status);
+          return merged;
+        }
+        const treeData = await treeRes.json();
+        const jsonPaths = Array.isArray(treeData.tree)
+          ? treeData.tree.filter(item => item.type === "blob" && item.path.toLowerCase().endsWith(".json")).map(item => item.path)
+          : [];
+
+        // ✅ Har mili hui .json file ko raw.githubusercontent.com se fetch karo
+        for (const path of jsonPaths) {
+          try {
+            const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${br}/${path}`;
+            const r = await fetch(rawUrl, { cache: "no-store" });
+            if (!r.ok) continue;
+            const data = await r.json();
+
+            // File ek array ho sakti hai [ {...}, {...} ] ya { tests: [...] } ya seedha ek test object
+            const arr = Array.isArray(data) ? data : (Array.isArray(data.tests) ? data.tests : [data]);
+
+            arr.forEach((t, idx) => {
+              if (!t || !t.questions) return; // jo entries valid test nahi hain unhe skip karo
+              if (!t.id) {
+                // id na ho to path + index se auto bana do (folder/sub/name.json -> folder_sub_name_0)
+                t.id = path.replace(/\.json$/i, "").replace(/[\/\\]+/g, "_") + "_" + idx;
+              }
+              merged.push(t);
+            });
+          } catch (e) {
+            console.log("File load nahi hui:", path, e);
           }
         }
       } catch (e) {
-        console.log("GitHub file-list API fail hui:", e);
+        console.log(`Repo scan fail: ${owner}/${repo}`, e);
       }
+      return merged;
+    }
 
-      // ✅ Step B: Agar API fail ho jaaye (rate-limit / private repo) to purane common naam try karo
-      if (jsonFileNames.length === 0) {
-        jsonFileNames = ["tests.json", "test.json"];
-      }
+    async function fetchAllTestsJSON() {
+      if (allTestsData.length) return allTestsData; // ek baar load ho gaya to dobara mat karo
 
-      // ✅ Step C: Har .json file fetch karo aur sabke tests ek list me merge karo
       let merged = [];
-      for (const fname of jsonFileNames) {
-        try {
-          const r = await fetch("./" + fname, { cache: "no-store" });
-          if (!r.ok) continue;
-          const data = await r.json();
 
-          // File ek array ho sakti hai [ {...}, {...} ] ya { tests: [...] } ya seedha ek test object
-          const arr = Array.isArray(data) ? data : (Array.isArray(data.tests) ? data.tests : [data]);
+      // ✅ Step A: Apni khud ki repo (jaha HTML hai) — root + sabhi subfolders scan karo
+      const { owner, repo } = getRepoInfoFromLocation();
+      if (owner && repo) {
+        const ownTests = await fetchJsonFilesFromRepo(owner, repo);
+        merged = merged.concat(ownTests);
+      }
 
-          arr.forEach((t, idx) => {
-            if (!t || !t.questions) return; // jo entries valid test nahi hain unhe skip karo
-            if (!t.id) t.id = fname.replace(/\.json$/i, "") + "_" + idx; // id na ho to auto bana do
-            merged.push(t);
-          });
-        } catch (e) {
-          console.log("File load nahi hui:", fname, e);
-        }
+      // ✅ Step B: Upar EXTERNAL_JSON_REPOS me jitni bhi alag repos di hain, unhe bhi scan karo
+      for (const ext of EXTERNAL_JSON_REPOS) {
+        if (!ext.owner || !ext.repo) continue;
+        const extTests = await fetchJsonFilesFromRepo(ext.owner, ext.repo, ext.branch);
+        merged = merged.concat(extTests);
       }
 
       allTestsData = merged;
