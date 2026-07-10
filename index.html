@@ -3494,7 +3494,7 @@
         renderPdfLinkButtons();
         document.getElementById("previewQCount").textContent = questions.length;
         showScreen("screenPreview");
-    } else {
+      } else {
         // ══ MODE 2: HTML me MCQs nahi — JSON list hi home page banao ══
         await fetchAllTestsJSON();
         testListPath = [];
@@ -3689,16 +3689,19 @@
         return;
       }
 
-      // ✅ Breadcrumb (Home / Geo / Sub ...)
+      // ✅ Back button + Breadcrumb (Home / Geo / Sub ...)
       if (testListPath.length > 0) {
-        let crumbHTML = `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:14px;">`;
+        const parentPath = testListPath.slice(0, -1);
+        let crumbHTML = `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">`;
+        crumbHTML += `<button onclick='navigateToFolder(${JSON.stringify(parentPath)})' style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:8px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">← Back</button>`;
+        crumbHTML += `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">`;
         crumbHTML += `<span style="cursor:pointer;color:var(--accent2);font-family:'Rajdhani',sans-serif;font-weight:700;" onclick="navigateToFolder([])">🏠 Home</span>`;
         testListPath.forEach((seg, idx) => {
           const pathUpto = testListPath.slice(0, idx + 1);
           crumbHTML += `<span style="color:var(--muted);">/</span>`;
           crumbHTML += `<span style="cursor:pointer;color:var(--accent2);font-family:'Rajdhani',sans-serif;font-weight:700;" onclick='navigateToFolder(${JSON.stringify(pathUpto)})'>${seg}</span>`;
         });
-        crumbHTML += `</div>`;
+        crumbHTML += `</div></div>`;
         wrap.innerHTML += crumbHTML;
       }
 
@@ -3761,7 +3764,7 @@
       }
     }
 
- async function openAllTestJsonList() {
+    async function openAllTestJsonList() {
       await fetchAllTestsJSON();
       testListPath = [];
       renderTestListScreen();
