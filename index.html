@@ -1,0 +1,5014 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPSC MCQ — Practice Test</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --card2: #21253a;
+      --border: #2e3250;
+      --accent: #f59e0b;
+      --accent2: #3b82f6;
+      --correct: #22c55e;
+      --wrong: #ef4444;
+      --text: #e8eaf6;
+      --muted: #8892b0;
+      --gold: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans Devanagari', 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      padding: 20px 16px 120px;
+      background-image: radial-gradient(ellipse at 20% 0%, #1e2a4a44 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, #2a1a3a44 0%, transparent 60%);
+    }
+
+    .screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--bg);
+      overflow-y: auto;
+      padding: 20px 16px 60px;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .screen-card {
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 440px;
+      margin: 20px auto;
+      padding: 32px 28px;
+      box-shadow: 0 8px 40px #00000066;
+    }
+
+    .screen-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .screen-sub {
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .fab-register {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 900;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      filter: drop-shadow(0 8px 24px #f59e0b55);
+      animation: fabPulse 2.5s ease-in-out infinite;
+    }
+
+    .fab-register.visible {
+      display: flex;
+    }
+
+    @keyframes fabPulse {
+
+      0%,
+      100% {
+        transform: translateX(-50%) scale(1);
+      }
+
+      50% {
+        transform: translateX(-50%) scale(1.04);
+      }
+    }
+
+    .fab-register-btn {
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 36px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 6px 28px #f59e0b66, 0 2px 8px #00000066;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background .2s;
+    }
+
+    .fab-register-btn:hover {
+      background: #d97706;
+    }
+
+    .fab-register-tip {
+      background: #0f1117cc;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      backdrop-filter: blur(8px);
+    }
+
+    .mode-switch-wrap {
+      max-width: 440px;
+      margin: 0 auto 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: none;
+    }
+
+    .mode-switch-wrap.visible {
+      display: block;
+    }
+
+    .mode-switch-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 12px 10px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .mode-btn.active-mode {
+      background: var(--accent);
+      color: #0f1117;
+      border-radius: 10px;
+    }
+
+    .mode-btn .mode-icon {
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .mode-btn .mode-name {
+      font-size: 0.82rem;
+      display: block;
+    }
+
+    .mode-btn .mode-desc {
+      font-size: 0.68rem;
+      opacity: 0.8;
+      display: block;
+      margin-top: 2px;
+    }
+
+    #screenPreview {
+      z-index: 500;
+      background: var(--bg);
+    }
+
+    .preview-hero {
+      max-width: 680px;
+      margin: 0 auto 18px;
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 8px 40px #00000066;
+    }
+
+    .preview-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f1117;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .preview-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .preview-sub {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .pdf-links-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .pdf-link-btn {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all .2s;
+      box-shadow: 0 4px 16px #7c3aed44;
+    }
+
+    .pdf-link-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px #7c3aed66;
+    }
+
+    .preview-stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .pstat {
+      background: #00000033;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .pstat .pv {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+      color: var(--gold);
+    }
+
+    .pstat .pl {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .btn-start-preview {
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 40px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all .2s;
+      box-shadow: 0 4px 20px #f59e0b44;
+    }
+
+    .btn-start-preview:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+    }
+
+    .preview-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 680px;
+      margin: 0 auto 18px;
+    }
+
+    .preview-lang-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .preview-lang-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .preview-lang-btn {
+      background: var(--card2);
+      border: 2px solid var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      padding: 7px 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all .2s;
+    }
+
+    .preview-lang-btn.active {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    .preview-lang-btn:hover:not(.active) {
+      border-color: var(--accent2);
+      color: var(--text);
+    }
+
+    .preview-mode-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .preview-mode-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .preview-mode-toggle {
+      display: flex;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .preview-mode-btn {
+      flex: 1;
+      padding: 11px 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .preview-mode-btn.active-mode {
+      background: var(--accent);
+      color: #0f1117;
+      border-radius: 8px;
+    }
+
+    .preview-mode-btn .pm-icon {
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .preview-mode-btn .pm-name {
+      font-size: 0.8rem;
+      display: block;
+    }
+
+    .preview-mode-btn .pm-desc {
+      font-size: 0.65rem;
+      opacity: 0.8;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .preview-mcq-list {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .preview-q-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      opacity: 0.6;
+      transition: opacity .2s;
+    }
+
+    .preview-q-card:hover {
+      opacity: 0.85;
+    }
+
+    .preview-q-header {
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+    }
+
+    .preview-q-num {
+      background: var(--accent);
+      color: #0f1117;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .preview-lock {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .preview-q-text {
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    .preview-opts {
+      padding: 0 18px 14px;
+    }
+
+    .preview-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+
+    .preview-opt:hover {
+      border-color: var(--accent);
+      background: #1e1a0a;
+    }
+
+    .preview-opt-lbl {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: 'Rajdhani', sans-serif;
+      flex-shrink: 0;
+      color: var(--muted);
+    }
+
+    .preview-blur {
+      filter: blur(4px);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .preview-cta {
+      max-width: 680px;
+      margin: 0 auto 100px;
+      text-align: center;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+    }
+
+    .preview-cta p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+
+    /* ══ TABLE STYLES ══ */
+    .table-question-wrapper {
+      width: 100%;
+      margin: 8px 0 14px;
+    }
+
+    .table-question-intro {
+      font-size: .97rem;
+      line-height: 1.8;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .mcq-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+
+    .mcq-table thead {
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .mcq-table th {
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--gold);
+      border-right: 1px solid var(--border);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem;
+    }
+
+    .mcq-table th:last-child {
+      border-right: none;
+    }
+
+    .mcq-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.2s;
+    }
+
+    .mcq-table tbody tr:hover {
+      background-color: rgba(59, 130, 246, 0.08);
+    }
+
+    .mcq-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .mcq-table td {
+      padding: 10px;
+      border-right: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .mcq-table td:last-child {
+      border-right: none;
+    }
+
+    .table-row-num {
+      background: var(--card);
+      font-weight: 700;
+      text-align: center;
+      min-width: 36px;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem;
+    }
+
+    .table-question-ask {
+      font-size: .93rem;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(245, 158, 11, 0.07);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+    }
+
+    /* Preview table — smaller padding */
+    .preview-table-wrapper {
+      width: 100%;
+      padding: 0 18px 10px;
+      overflow-x: auto;
+    }
+
+    .preview-mcq-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.78rem;
+    }
+
+    .preview-mcq-table thead {
+      background: #1e2a4a;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .preview-mcq-table th {
+      padding: 8px 8px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--gold);
+      border-right: 1px solid var(--border);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.74rem;
+    }
+
+    .preview-mcq-table th:last-child {
+      border-right: none;
+    }
+
+    .preview-mcq-table tbody tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-mcq-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .preview-mcq-table td {
+      padding: 7px 8px;
+      border-right: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .preview-mcq-table td:last-child {
+      border-right: none;
+    }
+
+    .preview-table-ask {
+      margin: 8px 18px 0;
+      font-size: .84rem;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 8px 10px;
+      background: rgba(245, 158, 11, 0.07);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--card2);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: 'Noto Sans Devanagari', 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color .2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent2);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all .2s;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .2s;
+      margin-top: 8px;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .form-error {
+      color: var(--wrong);
+      font-size: 0.78rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    .gender-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .gender-opt {
+      flex: 1;
+      background: var(--card2);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all .2s;
+      color: var(--muted);
+    }
+
+    .gender-opt.selected-m {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: #1e2d4a;
+    }
+
+    .gender-opt.selected-f {
+      border-color: #f472b6;
+      color: #f472b6;
+      background: #2d1a2d;
+    }
+
+    .pw-input-wrap {
+      position: relative;
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .pw-contact-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-telegram {
+      flex: 1;
+      background: #229ED9;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .2s;
+    }
+
+    .btn-telegram:hover {
+      background: #1a8cbe;
+    }
+
+    .btn-whatsapp {
+      flex: 1;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .2s;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1da851;
+    }
+
+    .profile-fab {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 800;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--card2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px #00000066;
+      transition: all .2s;
+    }
+
+    .profile-fab:hover {
+      transform: scale(1.08);
+      border-color: var(--gold);
+    }
+
+    .profile-fab .pf-placeholder {
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+
+    .profile-dropdown {
+      position: fixed;
+      top: 76px;
+      left: 18px;
+      z-index: 799;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      min-width: 220px;
+      box-shadow: 0 8px 30px #00000088;
+      display: none;
+      animation: fadeIn .2s ease;
+    }
+
+    .profile-dropdown.open {
+      display: block;
+    }
+
+    .pd-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .pd-mobile {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .pd-gender {
+      font-size: 0.72rem;
+      color: var(--accent2);
+      font-family: 'Rajdhani', sans-serif;
+      background: #1e2d4a;
+      border-radius: 6px;
+      padding: 2px 8px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .pd-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 0;
+    }
+
+    .pd-btn {
+      width: 100%;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all .2s;
+      margin-bottom: 6px;
+    }
+
+    .pd-btn:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .fab-timer {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .fab-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 20px #00000066;
+      transition: all .2s;
+    }
+
+    .fab-btn.on {
+      background: var(--accent);
+      color: #0f1117;
+    }
+
+    .fab-btn.off {
+      background: var(--card2);
+      color: var(--muted);
+      border: 2px solid var(--border);
+    }
+
+    .fab-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .timer-bubble {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 100px;
+      box-shadow: 0 4px 20px #00000066;
+    }
+
+    .timer-bubble .t-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .timer-bubble .t-time {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+      color: var(--accent);
+      letter-spacing: 2px;
+      transition: color .3s;
+    }
+
+    .timer-bubble .t-time.warn {
+      color: #ef4444;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .4;
+      }
+    }
+
+    .timer-bubble.hidden {
+      display: none;
+    }
+
+    .mode-badge-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .mode-badge-display.haath {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: #1e1a0a;
+    }
+
+    .mode-badge-display.submit {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: #0d1a2d;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+      padding-top: 10px;
+    }
+
+    .header h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+
+    .score-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      max-width: 720px;
+      margin: 0 auto 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      align-items: center;
+    }
+
+    .score-item {
+      text-align: center;
+    }
+
+    .score-item .val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .score-item .lbl {
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    .score-item.c .val {
+      color: var(--correct);
+    }
+
+    .score-item.w .val {
+      color: var(--wrong);
+    }
+
+    .score-item.t .val {
+      color: var(--accent);
+    }
+
+    .score-item.marks .val {
+      color: var(--gold);
+    }
+
+    .score-sep {
+      width: 1px;
+      background: var(--border);
+      height: 28px;
+    }
+
+    .marks-rule {
+      margin-left: auto;
+      background: #1e2a4a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      white-space: nowrap;
+    }
+
+    .marks-rule span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .q-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      max-width: 720px;
+      margin: 0 auto 18px;
+    }
+
+    .q-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.78rem;
+      font-family: 'Rajdhani', sans-serif;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all .2s;
+    }
+
+    .q-dot:hover:not(.locked) {
+      border-color: var(--accent2);
+      color: var(--text);
+    }
+
+    .q-dot.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #0f1117;
+    }
+
+    .q-dot.answered-c {
+      border-color: var(--correct);
+      color: var(--correct);
+      background: #0d2d1a;
+    }
+
+    .q-dot.answered-w {
+      border-color: var(--wrong);
+      color: var(--wrong);
+      background: #2d0d0d;
+    }
+
+    .q-dot.visited {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: #1e2d4a;
+    }
+
+    .q-dot.skipped {
+      border-color: #444;
+      color: #666;
+      background: var(--card);
+    }
+
+    .q-dot.locked {
+      cursor: default;
+    }
+
+    .quiz-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      max-width: 720px;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 8px 40px #00000055;
+    }
+
+    .question-header {
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 22px 14px;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .q-number {
+      background: var(--accent);
+      color: #0f1117;
+      font-weight: 700;
+      font-size: 0.74rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .q-tag {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .lang-toggle {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .lang-btn {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 0.74rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      transition: all .2s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    .question-text {
+      font-size: .97rem;
+      line-height: 1.8;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .options-wrap {
+      padding: 18px 22px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card2);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      margin-bottom: 9px;
+      cursor: pointer;
+      transition: all .22s;
+    }
+
+    .option:hover:not(.disabled) {
+      border-color: var(--accent2);
+      transform: translateX(3px);
+    }
+
+    .option.selected-submit {
+      border-color: var(--accent2);
+      background: #1e2d4a;
+    }
+
+    .option.correct {
+      border-color: var(--correct);
+      background: #0d2d1a;
+    }
+
+    .option.wrong {
+      border-color: var(--wrong);
+      background: #2d0d0d;
+    }
+
+    .option.disabled {
+      cursor: default;
+    }
+
+    .opt-label {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .83rem;
+      font-family: 'Rajdhani', sans-serif;
+      flex-shrink: 0;
+      color: var(--muted);
+      background: var(--card);
+      transition: all .22s;
+    }
+
+    .option.selected-submit .opt-label {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .option.correct .opt-label {
+      border-color: var(--correct);
+      color: var(--correct);
+      background: #0d2d1a;
+    }
+
+    .option.wrong .opt-label {
+      border-color: var(--wrong);
+      color: var(--wrong);
+      background: #2d0d0d;
+    }
+
+    .opt-text {
+      font-size: .91rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .opt-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .option.correct .opt-icon,
+    .option.wrong .opt-icon {
+      opacity: 1;
+    }
+
+    .answer-section {
+      margin: 0 22px 18px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .answer-section.show {
+      display: block;
+      animation: slideIn .3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .ans-header {
+      padding: 11px 16px;
+      font-weight: 700;
+      font-size: .86rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .ans-header.correct-h {
+      background: #0d2d1a;
+      color: var(--correct);
+      border-bottom: 1px solid #22c55e33;
+    }
+
+    .ans-header.wrong-h {
+      background: #2d0d0d;
+      color: var(--wrong);
+      border-bottom: 1px solid #ef444433;
+    }
+
+    .ans-marks-badge {
+      background: #00000033;
+      border-radius: 8px;
+      padding: 2px 10px;
+      font-size: .82rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+    }
+
+    .ans-marks-badge.pos {
+      color: #86efac;
+    }
+
+    .ans-marks-badge.neg {
+      color: #fca5a5;
+    }
+
+    .ans-body {
+      padding: 12px 16px;
+      background: #161921;
+    }
+
+    .ans-short {
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+      font-size: .9rem;
+    }
+
+    .ans-detail {
+      color: #b0bcd4;
+      font-size: .85rem;
+      line-height: 1.7;
+    }
+
+    .action-bar {
+      padding: 14px 22px 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .btn-next {
+      background: var(--card2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .2s;
+    }
+
+    .btn-next:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .btn-skip {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 600;
+      font-size: .82rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .2s;
+    }
+
+    .btn-skip:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    .btn-inline-submit {
+      background: var(--accent2);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-weight: 700;
+      font-size: .88rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      transition: all .2s;
+      box-shadow: 0 2px 12px #3b82f644;
+    }
+
+    .btn-inline-submit:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-inline-submit:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .mode-hint {
+      color: var(--muted);
+      font-size: .76rem;
+      font-style: italic;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .result-screen {
+      display: none;
+      max-width: 720px;
+      margin: 0 auto;
+      animation: slideIn .4s ease;
+    }
+
+    .result-screen.show {
+      display: block;
+    }
+
+    .result-hero {
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-align: center;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 40px #00000055;
+    }
+
+    .result-emoji {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .result-sub {
+      color: var(--muted);
+      font-size: .84rem;
+      margin-bottom: 24px;
+    }
+
+    .result-big-score {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .result-out-of {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-bottom: 20px;
+    }
+
+    .result-pct-bar {
+      background: #0a0d18;
+      border-radius: 99px;
+      height: 18px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: inset 0 2px 8px #00000055;
+      position: relative;
+    }
+
+    .result-pct-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #fbbf24);
+      transition: width 1.4s cubic-bezier(.4, 0, .2, 1);
+      box-shadow: 0 0 16px #8b5cf688, 0 0 6px #fbbf2466;
+      position: relative;
+    }
+
+    .result-pct-fill::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 8px;
+      right: 8px;
+      height: 5px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), transparent);
+      border-radius: 99px;
+    }
+
+    .result-pct-label {
+      font-size: .82rem;
+      color: var(--text);
+      margin-bottom: 24px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #1e2a4a, #1a1d27);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      display: inline-block;
+    }
+
+    .result-stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .rstat {
+      background: #00000033;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .rstat .rv {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .rstat .rl {
+      font-size: .7rem;
+      color: var(--muted);
+    }
+
+    .rstat.rc .rv {
+      color: var(--correct);
+    }
+
+    .rstat.rw .rv {
+      color: var(--wrong);
+    }
+
+    .rstat.rs .rv {
+      color: var(--muted);
+    }
+
+    .rstat.rm .rv {
+      color: var(--gold);
+    }
+
+    .rstat.clickable {
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .rstat.clickable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px #00000055;
+    }
+
+    .rstat.rc.active-filter {
+      box-shadow: 0 0 0 2px var(--correct);
+      background: #0d2d1a;
+    }
+
+    .rstat.rw.active-filter {
+      box-shadow: 0 0 0 2px var(--wrong);
+      background: #2d0d0d;
+    }
+
+    .rstat.rs.active-filter {
+      box-shadow: 0 0 0 2px var(--muted);
+      background: #1e2030;
+    }
+
+    .rstat .click-hint {
+      font-size: .6rem;
+      color: var(--muted);
+      opacity: .6;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .result-mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+    }
+
+    .result-mode-badge.haath {
+      background: #1e1a0a;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .result-mode-badge.submit {
+      background: #0d1a2d;
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+    }
+
+    .result-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .join-group-box {
+      width: 100%;
+      max-width: 420px;
+      margin: 12px auto 0;
+    }
+
+    @media(max-width:480px) {
+      .result-btns {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-see-details,
+      .btn-re-attempt {
+        width: 100%;
+      }
+
+      .join-group-box {
+        width: 100%;
+      }
+    }
+
+    .btn-see-details {
+      background: linear-gradient(135deg, #ff4d8d, #ff80ab);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 26px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all .3s ease;
+      box-shadow: 0 0 10px #ff4d8d55;
+      animation: pulseZoom 2s infinite;
+    }
+
+    .btn-see-details:hover,
+    .btn-see-details.active {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff4d8dcc;
+      background: linear-gradient(135deg, #ff2e7a, #ff5fa2);
+    }
+
+    @keyframes pulseZoom {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.06);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .btn-re-attempt {
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 24px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all .2s;
+    }
+
+    .btn-re-attempt:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+
+    .filter-bar {
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .filter-bar.show {
+      display: flex;
+    }
+
+    .filter-bar-label {
+      width: 100%;
+      text-align: center;
+      font-size: .72rem;
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .btn-filter {
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-size: .82rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      border: 2px solid;
+      transition: all .2s;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-filter .fc {
+      font-size: .72rem;
+      opacity: .8;
+    }
+
+    .btn-filter.all-f {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .btn-filter.all-f:hover,
+    .btn-filter.all-f.active {
+      background: var(--accent2);
+      color: #fff;
+    }
+
+    .btn-filter.correct-f {
+      border-color: var(--correct);
+      color: var(--correct);
+    }
+
+    .btn-filter.correct-f:hover,
+    .btn-filter.correct-f.active {
+      background: var(--correct);
+      color: #fff;
+    }
+
+    .btn-filter.wrong-f {
+      border-color: var(--wrong);
+      color: var(--wrong);
+    }
+
+    .btn-filter.wrong-f:hover,
+    .btn-filter.wrong-f.active {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    .btn-filter.skip-f {
+      border-color: var(--muted);
+      color: var(--muted);
+    }
+
+    .btn-filter.skip-f:hover,
+    .btn-filter.skip-f.active {
+      background: var(--muted);
+      color: #111;
+    }
+
+    .details-section {
+      display: none;
+    }
+
+    .details-section.show {
+      display: block;
+    }
+
+    .no-filter-result {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: .9rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .no-filter-result .nfr-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .detail-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .detail-card-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .dc-correct-header {
+      background: #0d2d1a;
+    }
+
+    .dc-wrong-header {
+      background: #2d0d0d;
+    }
+
+    .dc-skip-header {
+      background: #1a1d27;
+    }
+
+    .dc-qnum {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .78rem;
+      background: #00000033;
+      border-radius: 8px;
+      padding: 3px 10px;
+      color: var(--text);
+    }
+
+    .dc-result-badge {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .78rem;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+
+    .dc-result-badge.correct {
+      background: var(--correct);
+      color: #fff;
+    }
+
+    .dc-result-badge.wrong {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    .dc-result-badge.skip {
+      background: var(--border);
+      color: var(--muted);
+    }
+
+    .dc-marks {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .dc-marks.pos {
+      color: var(--correct);
+    }
+
+    .dc-marks.neg {
+      color: var(--wrong);
+    }
+
+    .dc-marks.zero {
+      color: var(--muted);
+    }
+
+    /* ✅ FIX: detail-q-text allows table rendering inside it */
+    .detail-q-text {
+      padding: 14px 16px 10px;
+      font-size: .9rem;
+      line-height: 1.7;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Table inside detail cards */
+    .detail-q-text .mcq-table {
+      font-size: 0.82rem;
+      margin: 10px 0;
+    }
+
+    .detail-q-text .table-question-wrapper {
+      margin: 4px 0 8px;
+    }
+
+    .detail-q-text .table-question-intro {
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+    }
+
+    .detail-q-text .table-question-ask {
+      font-size: 0.86rem;
+      margin-top: 8px;
+    }
+
+    .detail-opts {
+      padding: 10px 16px;
+    }
+
+    .detail-opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      font-size: .86rem;
+      border: 1px solid transparent;
+    }
+
+    .detail-opt.dco {
+      background: #0d2d1a;
+      border-color: var(--correct);
+    }
+
+    .detail-opt.dcw {
+      background: #2d0d0d;
+      border-color: var(--wrong);
+    }
+
+    .detail-opt-lbl {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .72rem;
+      font-family: 'Rajdhani', sans-serif;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: var(--card2);
+      color: var(--muted);
+    }
+
+    .detail-opt.dco .detail-opt-lbl {
+      background: var(--correct);
+      color: #fff;
+    }
+
+    .detail-opt.dcw .detail-opt-lbl {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    .detail-opt-note {
+      font-size: .72rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .detail-expl {
+      padding: 12px 16px;
+      background: #161921;
+      border-top: 1px solid var(--border);
+      font-size: .84rem;
+      color: #b0bcd4;
+      line-height: 1.7;
+    }
+
+    .detail-expl strong {
+      color: var(--gold);
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .toast-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #00000088;
+      z-index: 9998;
+    }
+
+    .toast-overlay.show {
+      display: block;
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      text-align: center;
+      z-index: 9999;
+      box-shadow: 0 20px 60px #000000aa;
+      max-width: 340px;
+      width: 90%;
+    }
+
+    .toast.show {
+      display: block;
+      animation: popIn .3s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: translate(-50%, -50%) scale(.85);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .toast h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.4rem;
+      color: var(--wrong);
+      margin-bottom: 8px;
+    }
+
+    .toast p {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .toast .btn-ok {
+      background: var(--accent);
+      color: #0f1117;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 28px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      width: 100%;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #ffffff44;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner-dark {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #00000044;
+      border-top-color: #0f1117;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+    }
+
+    .status-badge.sending {
+      background: #1e2d4a;
+      color: var(--accent2);
+    }
+
+    .status-badge.sent {
+      background: #0d2d1a;
+      color: var(--correct);
+    }
+
+    .status-badge.error {
+      background: #2d0d0d;
+      color: var(--wrong);
+    }
+
+    .pw-loading-info {
+      text-align: center;
+      padding: 10px;
+      color: var(--muted);
+      font-size: .8rem;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .auto-next-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 6px;
+    }
+
+    .auto-next-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      white-space: nowrap;
+      transition: color .2s;
+    }
+
+    .auto-next-label.on {
+      color: var(--accent);
+    }
+
+    .switch-3d {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .switch-3d input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-3d {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      border-radius: 99px;
+      background: #2e3250;
+      border: 1px solid #3b4070;
+      transition: background .3s;
+    }
+
+    .slider-3d::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #8892b0;
+      transition: transform .3s, background .3s;
+      box-shadow: 0 2px 6px #00000055;
+    }
+
+    .switch-3d input:checked+.slider-3d {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .switch-3d input:checked+.slider-3d::before {
+      transform: translateX(24px) translateY(-50%);
+      background: #0f1117;
+    }
+
+    .join-group-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e2a4a, #2a1a3a);
+      border: 1px solid #ff4d8d55;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 0 25px #ff4d8d33;
+      animation: fadeIn .6s ease;
+    }
+
+    .jg-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ff80ab;
+      margin-bottom: 6px;
+    }
+
+    .jg-sub {
+      font-size: .8rem;
+      color: #bbb;
+      margin-bottom: 14px;
+    }
+
+    .jg-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .jg-btn {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .jg-btn.wa {
+      background: #25D366;
+      color: #fff;
+    }
+
+    .jg-btn.tg {
+      background: #229ED9;
+      color: #fff;
+    }
+
+    .jg-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media(max-width:480px) {
+
+      .question-header,
+      .options-wrap,
+      .action-bar,
+      .answer-section {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .answer-section {
+        margin-left: 14px;
+        margin-right: 14px;
+      }
+
+      .result-big-score {
+        font-size: 3rem;
+      }
+
+      .screen-card {
+        padding: 24px 18px;
+      }
+
+      .btn-filter {
+        font-size: .76rem;
+        padding: 8px 12px;
+      }
+
+      .fab-register-btn {
+        font-size: .88rem;
+        padding: 14px 28px;
+      }
+
+      .switch-3d {
+        width: 44px;
+        height: 24px;
+      }
+
+      .slider-3d::before {
+        width: 17px;
+        height: 17px;
+      }
+
+      .switch-3d input:checked+.slider-3d::before {
+        transform: translateX(20px) translateY(-50%);
+      }
+
+      .mcq-table {
+        font-size: 0.76rem;
+      }
+
+      .mcq-table th,
+      .mcq-table td {
+        padding: 7px 6px;
+      }
+    }
+
+    /* ══ BORDER ANIMATION — Password Card ══ */
+    .screen-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen-card .bc-top,
+    .screen-card .bc-right,
+    .screen-card .bc-bottom,
+    .screen-card .bc-left {
+      position: absolute;
+      border-radius: 100vmax;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .screen-card .bc-top {
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 5px;
+      background: linear-gradient(90deg, transparent 50%, rgba(255, 49, 49, 0.5), rgb(255, 49, 49));
+      animation: bcTop 3s ease-in-out infinite;
+    }
+
+    .screen-card .bc-bottom {
+      right: 0;
+      bottom: 0;
+      height: 5px;
+      background: linear-gradient(90deg, rgb(57, 255, 20), rgba(57, 255, 20, 0.5), transparent 50%);
+      animation: bcBottom 3s ease-in-out infinite;
+    }
+
+    .screen-card .bc-right {
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(0, 255, 255, 0.5), rgb(0, 255, 255));
+      animation: bcRight 3s ease-in-out infinite;
+    }
+
+    .screen-card .bc-left {
+      left: 0;
+      bottom: 0;
+      width: 5px;
+      height: 0;
+      background: linear-gradient(180deg, rgb(255, 255, 113), rgba(255, 255, 113, 0.5), transparent 70%);
+      animation: bcLeft 3s ease-in-out infinite;
+    }
+
+    @keyframes bcTop {
+      25% {
+        width: 100%;
+        opacity: 1;
+      }
+
+      30%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes bcBottom {
+
+      0%,
+      50% {
+        opacity: 0;
+        width: 0;
+      }
+
+      75% {
+        opacity: 1;
+        width: 100%;
+      }
+
+      76%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes bcRight {
+
+      0%,
+      25% {
+        opacity: 0;
+        height: 0;
+      }
+
+      50% {
+        opacity: 1;
+        height: 100%;
+      }
+
+      55%,
+      100% {
+        height: 100%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes bcLeft {
+
+      0%,
+      75% {
+        opacity: 0;
+        bottom: 0;
+        height: 0;
+      }
+
+      100% {
+        opacity: 1;
+        height: 100%;
+      }
+    }
+
+    /* ══ GIRLS CONTACT NUMBER ANIMATED BOX ══ */
+    .gc-top,
+    .gc-right,
+    .gc-bottom,
+    .gc-left {
+      position: absolute;
+      border-radius: 100vmax;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .gc-top {
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 50%, rgba(255, 49, 49, 0.5), rgb(255, 49, 49));
+      animation: bcTop 3s ease-in-out infinite;
+    }
+
+    .gc-bottom {
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgb(57, 255, 20), rgba(57, 255, 20, 0.5), transparent 50%);
+      animation: bcBottom 3s ease-in-out infinite;
+    }
+
+    .gc-right {
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(0, 255, 255, 0.5), rgb(0, 255, 255));
+      animation: bcRight 3s ease-in-out infinite;
+    }
+
+    .gc-left {
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      height: 0;
+      background: linear-gradient(180deg, rgb(255, 255, 113), rgba(255, 255, 113, 0.5), transparent 70%);
+      animation: bcLeft 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ PREVIEW SCREEN ══ -->
+  <div class="screen active" id="screenPreview" style="position:relative;z-index:auto;overflow-y:auto;">
+    <div class="preview-hero">
+      <div class="preview-badge">📚 UPSC MCQ Practice</div>
+      <div class="preview-title" id="previewTitleText">6th History - 1st Chapter</div>
+      <div id="previewShareBtnWrap" style="display:none;margin-bottom:10px;">
+        <button onclick="shareTestLink(activeTestId)"
+          style="background:transparent;border:1px solid var(--accent2);color:var(--accent2);border-radius:20px;padding:5px 14px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer;">🔗
+          Is Test Ka Link Share Karo</button>
+      </div>
+      <div
+        style="color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:8px;letter-spacing:1px;">
+        share with your friends</div>
+      <div class="preview-sub">नीचे sample questions देखें — attempt करने के लिए Register करें</div>
+      <div class="preview-stats">
+        <div class="pstat">
+          <div class="pv" id="previewQCount">—</div>
+          <div class="pl">Questions</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">+2</div>
+          <div class="pl">सही</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">−0.66</div>
+          <div class="pl">गलत</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">16 min</div>
+          <div class="pl">Time</div>
+        </div>
+      </div>
+      <div class="pdf-links-row" id="pdfLinksRow"></div>
+      <button class="btn-start-preview" onclick="handleStartClick()">🚀 Quiz Attempt करें →</button>
+    </div>
+    <div class="preview-controls" id="previewControls">
+      <div class="preview-lang-row">
+        <span class="preview-lang-label">🌐 भाषा:</span>
+        <button class="preview-lang-btn" id="pBtnEN" onclick="setPreviewLang('en')">EN &nbsp;English</button>
+        <button class="preview-lang-btn active" id="pBtnHI" onclick="setPreviewLang('hi')">हिं &nbsp;Hindi</button>
+      </div>
+      <div class="preview-mode-box">
+        <div class="preview-mode-label">📋 Test Mode चुनें &nbsp;—&nbsp; Quiz शुरू होने पर यही Mode लागू होगा</div>
+        <div class="preview-mode-toggle">
+          <button class="preview-mode-btn active-mode" id="pModeHaath" onclick="setPreviewMode('haath')">
+            <span class="pm-icon">⚡</span><span class="pm-name">हाथो-हाथ</span><span class="pm-desc">Click करते ही
+              Answer</span>
+          </button>
+          <button class="preview-mode-btn" id="pModeSubmit" onclick="setPreviewMode('submit')">
+            <span class="pm-icon">📝</span><span class="pm-name">Submit Mode</span><span class="pm-desc">अंत में Submit
+              करें</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="preview-mcq-list" id="previewList"></div>
+    <div class="preview-cta">
+      <p>✨ सभी questions attempt करने के लिए Register करें — Free है!</p>
+      <button class="btn-start-preview" onclick="handleStartClick()" style="padding:14px 32px;font-size:.95rem;">📝
+        Register &amp; Start →</button>
+    </div>
+  </div>
+
+  <!-- ══ TEST LIST SCREEN (JSON wale sabhi tests yaha dikhte hain) ══ -->
+  <div class="screen" id="screenTestList">
+    <div style="max-width:680px;margin:0 auto;padding-top:10px;">
+      <div class="header">
+        <h1>📚 सभी Tests</h1>
+        <p>नीचे list में से कोई भी Test चुनें — Click करते ही शुरू हो जाएगा</p>
+      </div>
+      <div id="testListWrap"></div>
+    </div>
+  </div>
+
+  <!-- ✅ FAB REGISTER BUTTON -->
+  <div class="fab-register" id="fabRegister">
+    <div class="fab-register-tip">✨ Free Registration — सभी Questions Unlock</div>
+    <button class="fab-register-btn" onclick="handleStartClick()">📝 REGISTER &amp; START →</button>
+  </div>
+
+  <!-- ══ REGISTRATION ══ -->
+  <div class="screen" id="screenReg">
+    <div class="screen-card">
+      <div class="screen-title">📝 Registration</div>
+      <div class="screen-sub">एक बार register करें — quiz के लिए तैयार हों</div>
+      <div class="form-group">
+        <label class="form-label">पूरा नाम *</label>
+        <input class="form-input" id="regName" type="text" placeholder="आपका नाम लिखें" maxlength="60">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mobile Number *</label>
+        <input class="form-input" id="regMobile" type="tel" placeholder="10-digit number" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gender *</label>
+        <div class="gender-row">
+          <div class="gender-opt" id="gBoy" onclick="selectGender('boys')">👦 Boy</div>
+          <div class="gender-opt" id="gGirl" onclick="selectGender('girls')">👧 Girl</div>
+        </div>
+      </div>
+      <div class="form-error" id="regError">⚠ सभी fields भरें</div>
+      <button class="btn-primary" id="regBtn" onclick="submitRegistration()">Register करें →</button>
+      <button class="btn-secondary" onclick="showScreen('screenPreview')">← वापस जाएं</button>
+    </div>
+  </div>
+
+  <!-- ══ PASSWORD ══ -->
+  <div class="screen" id="screenPW">
+    <div class="screen-card">
+      <span class="bc-top"></span>
+      <span class="bc-right"></span>
+      <span class="bc-bottom"></span>
+      <span class="bc-left"></span>
+      <div class="screen-title">🔐 Password</div>
+      <div class="screen-sub">Test शुरू करने के लिए password डालें</div>
+      <div class="form-group pw-input-wrap">
+        <label class="form-label">Test Password</label>
+        <input class="form-input" id="pwInput" type="password" placeholder="Password यहाँ डालें"
+          onkeydown="if(event.key==='Enter') checkPassword()">
+        <span class="pw-toggle" onclick="togglePWVis()">👁</span>
+      </div>
+      <div class="pw-loading-info" id="pwLoadingInfo" style="display:none;">
+        <span class="spinner-dark" style="border-top-color:var(--accent);border-color:var(--border);"></span>
+        &nbsp;Password verify हो रहा है...
+      </div>
+      <div class="form-error" id="pwError">❌ Password गलत है — नीचे दिए button से contact करें</div>
+      <button class="btn-primary" id="pwBtn" onclick="checkPassword()">
+        <span id="pwBtnSpinner" class="spinner-dark" style="display:none;border-top-color:#0f1117;"></span>
+        <span id="pwBtnText">🔓 Start Test</span>
+      </button>
+      <div id="pwContactBtns" style="display:none;margin-top:14px;">
+        <div style="text-align:center;font-size:.78rem;color:var(--muted);margin-bottom:10px;">Password के लिए संपर्क
+          करें:</div>
+        <div class="pw-contact-btns" id="pwContactRow"></div>
+      </div>
+      <button class="btn-secondary" onclick="showScreen('screenPreview')">← वापस जाएं</button>
+    </div>
+  </div>
+
+  <!-- ══ EDIT PROFILE ══ -->
+  <div class="screen" id="screenEdit">
+    <div class="screen-card">
+      <div class="screen-title">✏️ Edit Profile</div>
+      <div class="screen-sub">अपनी जानकारी update करें</div>
+      <div class="form-group">
+        <label class="form-label">पूरा नाम *</label>
+        <input class="form-input" id="editName" type="text" maxlength="60">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mobile Number *</label>
+        <input class="form-input" id="editMobile" type="tel" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gender *</label>
+        <div class="gender-row">
+          <div class="gender-opt" id="eBoy" onclick="selectGenderEdit('boys')">👦 Boy</div>
+          <div class="gender-opt" id="eGirl" onclick="selectGenderEdit('girls')">👧 Girl</div>
+        </div>
+      </div>
+      <div class="form-error" id="editError">⚠ सभी fields भरें</div>
+      <button class="btn-primary" id="editBtn" onclick="submitEdit()">Save Changes →</button>
+      <button class="btn-secondary" onclick="closeEdit()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE FAB ══ -->
+  <div class="profile-fab" id="profileFab" onclick="toggleProfileDropdown()" style="display:none;">
+    <span class="pf-placeholder" id="pfEmoji">👤</span>
+  </div>
+  <!-- ══ ALL TESTS FAB ══ -->
+  <div id="allTestFab"></div>
+  <div class="profile-dropdown" id="profileDropdown">
+    <div class="pd-name" id="pdName">—</div>
+    <div class="pd-mobile" id="pdMobile">—</div>
+    <div class="pd-gender" id="pdGender">—</div>
+    <div class="pd-sep"></div>
+    <button class="pd-btn" onclick="openEdit()">✏️ Edit Profile</button>
+    <button class="pd-btn" onclick="closeDropdownAndNewReg()">🔄 New Registration</button>
+  </div>
+
+  <!-- ══ TIMER FAB ══ -->
+  <div class="fab-timer" id="fabTimer" style="display:none;">
+    <button class="fab-btn on" id="fabBtn" onclick="toggleTimer()">⏱</button>
+    <div class="timer-bubble" id="timerBubble">
+      <div class="t-label">Time Left</div>
+      <div class="t-time" id="timerDisplay">--:--:--</div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast-overlay" id="toastOverlay"></div>
+  <div class="toast" id="autoSubmitToast">
+    <h3>⏰ Time's Up!</h3>
+    <p>समय समाप्त!<br>Quiz auto-submit हो गई।</p>
+    <button class="btn-ok" onclick="closeToast()">Result देखें →</button>
+  </div>
+
+  <!-- ══ MAIN QUIZ ══ -->
+  <div id="mainQuiz" style="display:none;">
+    <div class="header">
+      <h1>
+        <button id="downloadIcon" onclick="handleDownloadClick(event)"
+          style="background:none;border:none;font-size:1.6rem;cursor:pointer;">📚</button>
+        UPSC MCQ Practice
+      </h1>
+      <p id="testNameBadge">Live MCQs &nbsp;|&nbsp; <b style="color:var(--correct)">+2</b> सही &nbsp;/&nbsp; <b
+          style="color:var(--wrong)">−0.66</b> गलत</p>
+      <div id="modeBadgeDisplay" class="mode-badge-display"></div>
+    </div>
+    <div class="mode-switch-wrap visible" id="modeSwitchWrap">
+      <div class="mode-switch-label">📋 Test Mode चुनें</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active-mode" id="modeHaathBtn" onclick="setMode('haath')">
+          <span class="mode-icon">⚡</span><span class="mode-name">हाथो-हाथ</span><span class="mode-desc">Click करते ही
+            Answer</span>
+        </button>
+        <button class="mode-btn" id="modeSubmitBtn" onclick="setMode('submit')">
+          <span class="mode-icon">📝</span><span class="mode-name">Submit Mode</span><span class="mode-desc">अंत में
+            Submit करें</span>
+        </button>
+      </div>
+    </div>
+    <div class="score-bar" id="scoreBar">
+      <div class="score-item t">
+        <div class="val" id="totalQ">0</div>
+        <div class="lbl">Total</div>
+      </div>
+      <div class="score-sep"></div>
+      <div class="score-item c">
+        <div class="val" id="correctQ">0</div>
+        <div class="lbl">सही ✓</div>
+      </div>
+      <div class="score-sep"></div>
+      <div class="score-item w">
+        <div class="val" id="wrongQ">0</div>
+        <div class="lbl">गलत ✗</div>
+      </div>
+      <div class="score-sep"></div>
+      <div class="score-item marks">
+        <div class="val" id="marksVal">0.00</div>
+        <div class="lbl">Marks</div>
+      </div>
+      <div class="auto-next-wrap" id="autoNextWrap">
+        <span class="auto-next-label" id="autoNextLabel">⚡ Auto</span>
+        <label class="switch-3d">
+          <input type="checkbox" id="autoNextToggle" onchange="onAutoNextChange(this)">
+          <span class="slider-3d"></span>
+        </label>
+      </div>
+      <div class="marks-rule"><span>+2</span> सही &nbsp;|&nbsp; <span>−0.66</span> गलत</div>
+    </div>
+    <div class="q-nav" id="qNav"></div>
+    <div class="quiz-card" id="quizCard">
+      <div class="question-header">
+        <div class="q-meta">
+          <span class="q-number" id="qLabel">Q 1</span>
+          <span class="q-tag" id="qTagText"></span>
+          <div class="lang-toggle">
+            <button class="lang-btn" id="btnEN" onclick="setLang('en')">English</button>
+            <button class="lang-btn active" id="btnHI" onclick="setLang('hi')">Hindi</button>
+          </div>
+        </div>
+        <div class="question-text" id="questionText"></div>
+      </div>
+      <div class="options-wrap" id="optionsWrap"></div>
+      <div class="answer-section" id="answerSection">
+        <div class="ans-header" id="ansHeader">
+          <span id="ansHeaderText"></span>
+          <span class="ans-marks-badge" id="ansMarksBadge"></span>
+        </div>
+        <div class="ans-body">
+          <div class="ans-short" id="ansShort"></div>
+          <div class="ans-detail" id="ansDetail"></div>
+        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next →</button>
+        <button class="btn-skip" id="skipBtn" onclick="skipQuestion()" style="display:none;">Skip →</button>
+        <button class="btn-inline-submit" id="inlineSubmitBtn" onclick="finalSubmitMode()" style="display:none;">✅
+          Submit Quiz</button>
+        <div class="mode-hint" id="modeHint"></div>
+      </div>
+    </div>
+    <div class="result-screen" id="resultScreen">
+      <div class="result-hero">
+        <div class="result-emoji" id="resultEmoji">🎯</div>
+        <div class="result-title">Quiz Complete!</div>
+        <div class="result-sub" id="resultSubtitle">यहाँ आपका परिणाम है</div>
+        <div id="resultModeBadge" class="result-mode-badge"></div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-bottom:4px;">
+          <div class="result-big-score" id="resultBigScore" style="font-size:3.5rem;">0.00</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:1.6rem;color:var(--muted);font-weight:700;">/</div>
+          <div id="resultMaxMarks"
+            style="font-family:'Rajdhani',sans-serif;font-size:2.2rem;color:#fbbf24;font-weight:700;">0</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:1rem;color:var(--muted);margin-left:4px;">Marks</div>
+        </div>
+        <div class="result-out-of" id="resultOutOf" style="font-size:0.82rem;margin-bottom:6px;"></div>
+        <div class="result-pct-bar">
+          <div class="result-pct-fill" id="resultPctFill" style="width:0%"></div>
+        </div>
+        <div class="result-pct-label" id="resultPctLabel">0% Accuracy</div>
+        <div id="resultSendStatus" style="margin-bottom:16px;"></div>
+        <div class="result-stats">
+          <div class="rstat rc clickable" id="statCorrect" onclick="filterDetails('correct')" style="min-width:90px;">
+            <div class="rv" id="rCorrect">0</div>
+            <div class="rl">सही ✓</div>
+            <div id="rCorrectFrac"
+              style="font-size:0.7rem;color:#86efac;font-family:'Rajdhani',sans-serif;margin-top:3px;">0/0</div>
+            <span class="click-hint">👆 filter</span>
+          </div>
+          <div class="rstat rw clickable" id="statWrong" onclick="filterDetails('wrong')" style="min-width:90px;">
+            <div class="rv" id="rWrong">0</div>
+            <div class="rl">गलत ✗</div>
+            <div id="rWrongFrac"
+              style="font-size:0.7rem;color:#fca5a5;font-family:'Rajdhani',sans-serif;margin-top:3px;">0/0</div>
+            <span class="click-hint">👆 filter</span>
+          </div>
+          <div class="rstat rs clickable" id="statSkip" onclick="filterDetails('skip')" style="min-width:90px;">
+            <div class="rv" id="rSkip">0</div>
+            <div class="rl">छोड़े</div>
+            <div id="rSkipFrac"
+              style="font-size:0.7rem;color:#8892b0;font-family:'Rajdhani',sans-serif;margin-top:3px;">0/0</div>
+            <span class="click-hint">👆 filter</span>
+          </div>
+          <div class="rstat rm" style="min-width:90px;">
+            <div class="rv" id="rMarks">0.00</div>
+            <div class="rl">Marks</div>
+            <div id="rMarksFrac"
+              style="font-size:0.7rem;color:#fbbf24;font-family:'Rajdhani',sans-serif;margin-top:3px;">0/0</div>
+          </div>
+        </div>
+        <div class="result-btns">
+          <button class="btn-see-details" id="btnAllDetails" onclick="filterDetails('all')">📋 सभी देखें</button>
+          <button class="btn-re-attempt" onclick="reAttempt()">🔄 Re-Attempt</button>
+          <button onclick="openPdfPopup()"
+            style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:none;border-radius:12px;padding:13px 24px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:'Rajdhani',sans-serif;letter-spacing:1px;text-transform:uppercase;transition:all .2s;box-shadow:0 4px 20px #7c3aed44;">📄
+            PDF Download</button>
+        </div>
+        <div class="join-group-box">
+          <div class="jg-title">🚀 Join Premium Group</div>
+          <div class="jg-sub">Daily Test + PDF + Rank + Discussion</div>
+          <div class="jg-btns">
+            <button class="jg-btn wa" onclick="joinWhatsApp()">💬 WhatsApp Join</button>
+            <button class="jg-btn tg" onclick="joinTelegram()">📲 Telegram Join</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-bar" id="filterBar">
+        <div class="filter-bar-label">Filter Questions</div>
+        <button class="btn-filter all-f" id="fBtn-all" onclick="filterDetails('all')">📋 सभी <span class="fc"
+            id="fc-all"></span></button>
+        <button class="btn-filter correct-f" id="fBtn-correct" onclick="filterDetails('correct')">✅ सही <span class="fc"
+            id="fc-correct"></span></button>
+        <button class="btn-filter wrong-f" id="fBtn-wrong" onclick="filterDetails('wrong')">❌ गलत <span class="fc"
+            id="fc-wrong"></span></button>
+        <button class="btn-filter skip-f" id="fBtn-skip" onclick="filterDetails('skip')">— Skip <span class="fc"
+            id="fc-skip"></span></button>
+      </div>
+      <div class="details-section" id="detailsSection"></div>
+    </div>
+
+    <!-- ══ PDF DOWNLOAD POPUP ══ -->
+    <div id="pdfPopupOverlay"
+      style="display:none;position:fixed;inset:0;background:#00000099;z-index:9990;overflow-y:auto;padding:20px 16px 40px;">
+      <div
+        style="background:linear-gradient(135deg,#1e2a4a,#1a1d27);border:1px solid #2e3250;border-radius:20px;max-width:480px;margin:20px auto;padding:28px 24px;box-shadow:0 20px 60px #000000aa;position:relative;">
+        <button onclick="closePdfPopup()"
+          style="position:absolute;top:14px;right:16px;background:#21253a;border:1px solid #2e3250;color:#8892b0;border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.8rem;">✕
+          Close</button>
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:2rem;margin-bottom:6px;">📄</div>
+          <div
+            style="font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;color:#fbbf24;letter-spacing:2px;text-transform:uppercase;">
+            PDF Download</div>
+          <div style="color:#8892b0;font-size:0.78rem;margin-top:4px;">अपनी जरूरत के अनुसार PDF चुनें</div>
+
+          <!-- 🌐 Language Selector -->
+          <div style="margin-top:14px;margin-bottom:2px;">
+            <div
+              style="font-family:'Rajdhani',sans-serif;font-size:0.72rem;color:#8892b0;letter-spacing:1px;text-transform:uppercase;text-align:center;margin-bottom:8px;">
+              📄 PDF भाषा चुनें</div>
+            <div style="display:flex;background:#0a0d18;border:1px solid #2e3250;border-radius:10px;overflow:hidden;"
+              id="pdfLangToggle">
+              <button onclick="setPdfLang('hi')" id="pdfLangHI"
+                style="flex:1;padding:10px 6px;border:none;background:transparent;color:#8892b0;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;transition:all .2s;border-right:1px solid #2e3250;">
+                🇮🇳 हिंदी
+              </button>
+              <button onclick="setPdfLang('en')" id="pdfLangEN"
+                style="flex:1;padding:10px 6px;border:none;background:transparent;color:#8892b0;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;transition:all .2s;border-right:1px solid #2e3250;">
+                🇬🇧 English
+              </button>
+              <button onclick="setPdfLang('bi')" id="pdfLangBI"
+                style="flex:1;padding:10px 6px;border:none;background:transparent;color:#8892b0;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;transition:all .2s;">
+                🔀 Bilingual
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: Without Answer -->
+        <div style="background:#0a0d18;border:1px solid #2e3250;border-radius:14px;padding:16px;margin-bottom:14px;">
+          <div
+            style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.82rem;color:#3b82f6;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+            <span style="background:#1e2d4a;border:1px solid #3b82f6;border-radius:6px;padding:3px 10px;">📋 Section
+              1</span>
+            बिना Answer के MCQs
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button onclick="downloadPDF('all_withexpl')"
+              style="width:100%;background:linear-gradient(135deg,#1e1a0a,#0d0a05);border:1px solid #f59e0b;color:#fbbf24;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">📝</span><span>All MCQs + Explanation (without result)</span>
+            </button>
+            <button onclick="downloadPDF('all_noanswer')"
+              style="width:100%;background:linear-gradient(135deg,#1e2d4a,#0d1a2d);border:1px solid #3b82f6;color:#93c5fd;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">📥</span><span>All MCQs Download (without answer)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 2: With Answer & Explanation -->
+        <div style="background:#0a0d18;border:1px solid #2e3250;border-radius:14px;padding:16px;">
+          <div
+            style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.82rem;color:#f59e0b;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+            <span style="background:#1e1a0a;border:1px solid #f59e0b;border-radius:6px;padding:3px 10px;">📝 Section
+              2</span>
+            Answer + Explanation के साथ
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button onclick="downloadPDF('all_answer')"
+              style="width:100%;background:linear-gradient(135deg,#1e2a0a,#0d1a05);border:1px solid #22c55e;color:#86efac;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">📋</span><span>All Questions Download</span>
+            </button>
+            <button onclick="downloadPDF('correct_answer')"
+              style="width:100%;background:linear-gradient(135deg,#0d2d1a,#051a0d);border:1px solid #22c55e;color:#86efac;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">✅</span><span>Only Correct (सही वाले)</span>
+            </button>
+            <button onclick="downloadPDF('wrong_answer')"
+              style="width:100%;background:linear-gradient(135deg,#2d0d0d,#1a0505);border:1px solid #ef4444;color:#fca5a5;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">❌</span><span>Only Wrong (गलत वाले)</span>
+            </button>
+            <button onclick="downloadPDF('skip_answer')"
+              style="width:100%;background:linear-gradient(135deg,#1e2030,#0d0f1a);border:1px solid #8892b0;color:#8892b0;border-radius:10px;padding:12px 16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;">
+              <span style="font-size:1.1rem;">⏭</span><span>Only Skipped (छोड़े हुए)</span>
+            </button>
+          </div>
+        </div>
+
+        <div
+          style="margin-top:12px;text-align:center;font-size:0.72rem;color:#8892b050;font-family:'Rajdhani',sans-serif;">
+          PDF me WhatsApp & Telegram join links bhi honge</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby60ZZLLmd1_VE2yNirek_0evj21kx7JhWNQcbkXJriCAbjNRLN7wgTRMA6ozZvEMJz/exec";
+    const TEST_NAME = "6th His 1st chapter";
+
+    // ════ MULTI-TEST JSON CONFIG ════
+    // GitHub ke isi folder me "tests.json" naam ki file daalo
+    const TESTS_JSON_URL = "./tests.json";
+
+    const CORRECT_M = 2;
+    const WRONG_M = -(2 / 3);
+    const TOTAL_Q_REF = 100;
+    const TOTAL_TIME = 2 * 3600;
+
+    // ════ PDF LINKS CONFIG ════
+    // Yaha url daaloge to button dikhega, url khali/hataoge to button gayab ho jayega
+    // text yaha se edit karo — frontend se nahi
+    const PDF_LINKS_CONFIG = {
+      hindi: { text: "📕 Hindi PDFs", url: "https://tr.ee/AE44VBDhHd" },
+      eng: { text: "Join Group", url: "https://chat.whatsapp.com/CyaT5IyjsI2E1vSI24fp8Z" }
+    };
+
+    function renderPdfLinkButtons() {
+      const row = document.getElementById("pdfLinksRow");
+      if (!row) return;
+      row.innerHTML = "";
+      Object.values(PDF_LINKS_CONFIG).forEach(item => {
+        if (item.url && item.url.trim() !== "") {
+          const a = document.createElement("a");
+          a.className = "pdf-link-btn";
+          a.href = item.url.trim();
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = item.text;
+          row.appendChild(a);
+        }
+      });
+    }
+    // ════ CONTACT CONFIG (Sheet se load hoga) ════
+    let CONTACT_CONFIG = null;
+
+    async function loadContactConfig() {
+      try {
+        const r = await api({ action: "getContactConfig" });
+        if (r.ok) CONTACT_CONFIG = r.config;
+      } catch (e) { CONTACT_CONFIG = null; }
+    }
+
+
+    async function api(params) {
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(params) });
+        return await res.json();
+      } catch (e) { return { ok: false, error: "API failed" }; }
+    }
+
+    const questions = [
+      {
+        "type": "normal",
+        "question": "Consider the following statements regarding the sources used for reconstructing the past:\n1. Manuscripts are generally handwritten records prepared on materials such as palm leaves or birch bark.\n2. Inscriptions are usually engraved on relatively hard surfaces like stone or metal.\n3. Archaeological sources alone are sufficient to reconstruct every aspect of ancient history.\nWhich of the statements given above are correct?",
+        "questionHindi": "अतीत के पुनर्निर्माण में प्रयुक्त स्रोतों के संबंध में निम्नलिखित कथनों पर विचार कीजिए:\n1. पाण्डुलिपियाँ सामान्यतः हाथ से लिखे गए अभिलेख होते हैं, जिन्हें ताड़पत्र या भोजपत्र जैसी सामग्री पर लिखा जाता था।\n2. अभिलेख सामान्यतः पत्थर या धातु जैसी अपेक्षाकृत कठोर सतहों पर उत्कीर्ण किए जाते थे।\n3. केवल पुरातात्त्विक स्रोत ही प्राचीन इतिहास के प्रत्येक पक्ष के पुनर्निर्माण के लिए पर्याप्त हैं।\nउपर्युक्त में से कौन-से कथन सही हैं?",
+        "options": [
+          "1 and 2 only",
+          "2 and 3 only",
+          "1 and 3 only",
+          "1, 2 and 3"
+        ],
+        "optionsHindi": [
+          "केवल 1 और 2",
+          "केवल 2 और 3",
+          "केवल 1 और 3",
+          "1, 2 और 3"
+        ],
+        "answer": 0,
+        "explanation": "Statements 1 and 2 are correct. Statement 3 is incorrect.\n\nStatement 1 is correct because manuscripts were handwritten mainly on palm leaves and birch bark.\n\nStatement 2 is correct because inscriptions were engraved on durable materials such as stone and metal.\n\nStatement 3 is incorrect because historians reconstruct the past using manuscripts, inscriptions as well as archaeological evidence together.",
+        "explanationHindi": "कथन 1 और 2 सही हैं। कथन 3 गलत है।\n\nकथन 1 सही है क्योंकि पाण्डुलिपियाँ मुख्यतः ताड़पत्र एवं भोजपत्र पर हाथ से लिखी जाती थीं।\n\nकथन 2 सही है क्योंकि अभिलेख पत्थर एवं धातु जैसी कठोर सतहों पर उत्कीर्ण किए जाते थे।\n\nकथन 3 गलत है क्योंकि इतिहासकार अतीत के पुनर्निर्माण के लिए पाण्डुलिपियों, अभिलेखों तथा पुरातात्त्विक साक्ष्यों—तीनों का उपयोग करते हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Which one of the following best explains why archaeologists are often able to recover pottery, tools and bones but rarely find ancient clothes?",
+        "questionHindi": "निम्नलिखित में से कौन-सा कथन सर्वाधिक उपयुक्त रूप से स्पष्ट करता है कि पुरातत्त्वविदों को प्राचीन वस्त्रों की तुलना में मिट्टी के बर्तन, औजार और हड्डियाँ अधिक क्यों मिलती हैं?",
+        "options": [
+          "Ancient people did not wear clothes regularly.",
+          "Clothes were generally made of perishable materials, whereas pottery and stone survive much longer.",
+          "Archaeologists are interested only in pottery and tools.",
+          "Ancient clothes were always buried in temples."
+        ],
+        "optionsHindi": [
+          "प्राचीन लोग नियमित रूप से वस्त्र नहीं पहनते थे।",
+          "वस्त्र सामान्यतः नष्ट होने वाली सामग्री से बने होते थे, जबकि मिट्टी एवं पत्थर की वस्तुएँ अधिक समय तक सुरक्षित रहती हैं।",
+          "पुरातत्त्वविद केवल बर्तनों और औजारों में रुचि रखते हैं।",
+          "प्राचीन वस्त्र सदैव मंदिरों में दबाए जाते थे।"
+        ],
+        "answer": 1,
+        "explanation": "Option B is correct.\n\nAncient clothes usually decayed over time, whereas pottery, stone tools and bones survive for much longer and are therefore more likely to be discovered during excavations.\n\nThe remaining options are incorrect.",
+        "explanationHindi": "विकल्प B सही है।\n\nप्राचीन वस्त्र सामान्यतः शीघ्र नष्ट हो जाते थे, जबकि मिट्टी के बर्तन, पत्थर के औजार और हड्डियाँ लंबे समय तक सुरक्षित रह जाती हैं, इसलिए उत्खनन में उनके मिलने की संभावना अधिक होती है।\n\nअन्य सभी विकल्प गलत हैं।"
+      },
+      {
+        "type": "normal",
+        "question": "Consider the following statements regarding early settlements in the Indian subcontinent:\n1. Some of the earliest hunter-gatherers lived along the banks of the Narmada River.\n2. Wheat and barley cultivation began in the north-western region near the Sulaiman and Kirthar Hills.\n3. The earliest rice cultivation developed first in the Ganga Delta.\nWhich of the statements given above are correct?",
+        "questionHindi": "भारतीय उपमहाद्वीप की प्रारंभिक बस्तियों के संबंध में निम्नलिखित कथनों पर विचार कीजिए:\n1. प्रारंभिक आखेटक-संग्राहकों में से कुछ नर्मदा नदी के तटों पर रहते थे।\n2. गेहूँ और जौ की खेती का आरम्भ उत्तर-पश्चिम में सुलेमान एवं किरथर पहाड़ियों के निकट हुआ।\n3. चावल की सबसे प्रारंभिक खेती सर्वप्रथम गंगा डेल्टा में विकसित हुई।\nउपर्युक्त में से कौन-से कथन सही हैं?",
+        "options": [
+          "1 only",
+          "1 and 2 only",
+          "2 and 3 only",
+          "1, 2 and 3"
+        ],
+        "optionsHindi": [
+          "केवल 1",
+          "केवल 1 और 2",
+          "केवल 2 और 3",
+          "1, 2 और 3"
+        ],
+        "answer": 1,
+        "explanation": "Statements 1 and 2 are correct. Statement 3 is incorrect.\n\nStatement 1 is correct because early hunter-gatherers lived along the Narmada Valley.\n\nStatement 2 is correct because wheat and barley cultivation began near the Sulaiman and Kirthar Hills.\n\nStatement 3 is incorrect because the earliest rice cultivation developed north of the Vindhyas, not in the Ganga Delta.",
+        "explanationHindi": "कथन 1 और 2 सही हैं। कथन 3 गलत है।\n\nकथन 1 सही है क्योंकि प्रारंभिक आखेटक-संग्राहक नर्मदा घाटी में रहते थे।\n\nकथन 2 सही है क्योंकि गेहूँ एवं जौ की खेती का आरम्भ सुलेमान और किरथर पहाड़ियों के निकट हुआ।\n\nकथन 3 गलत है क्योंकि चावल की प्रारंभिक खेती विंध्य के उत्तर में विकसित हुई थी, गंगा डेल्टा में नहीं।"
+      },
+      {
+        "type": "normal",
+        "question": "Consider the following statements regarding the names 'India' and 'Bharata':\n1. The word 'India' is derived from the river Indus (Sindhu).\n2. The Persians and Greeks referred to the region east of the Sindhu as India.\n3. The term 'Bharata' originally referred to a group of people mentioned in the Rigveda.\nWhich of the statements given above are correct?",
+        "questionHindi": "‘इण्डिया’ एवं ‘भारत’ नामों के संबंध में निम्नलिखित कथनों पर विचार कीजिए:\n1. 'इण्डिया' शब्द इण्डस (सिंधु) नदी से निकला है।\n2. ईरानियों और यूनानियों ने सिंधु के पूर्व के भू-भाग को इण्डिया कहा।\n3. 'भारत' शब्द का प्रारम्भिक प्रयोग ऋग्वेद में वर्णित एक समुदाय के लिए हुआ था।\nउपर्युक्त में से कौन-से कथन सही हैं?",
+        "options": [
+          "1 and 2 only",
+          "2 and 3 only",
+          "1 and 3 only",
+          "1, 2 and 3"
+        ],
+        "optionsHindi": [
+          "केवल 1 और 2",
+          "केवल 2 और 3",
+          "केवल 1 और 3",
+          "1, 2 और 3"
+        ],
+        "answer": 3,
+        "explanation": "All three statements are correct.\n\nStatement 1 is correct because India is derived from Indus (Sindhu).\n\nStatement 2 is correct because Persians and Greeks used the name India for the land east of the Sindhu.\n\nStatement 3 is correct because Bharata originally referred to a group of people mentioned in the Rigveda.",
+        "explanationHindi": "तीनों कथन सही हैं।\n\nकथन 1 सही है क्योंकि 'इण्डिया' शब्द इण्डस (सिंधु) नदी से निकला है।\n\nकथन 2 सही है क्योंकि ईरानियों एवं यूनानियों ने सिंधु के पूर्व स्थित भू-भाग को इण्डिया कहा।\n\nकथन 3 सही है क्योंकि 'भारत' शब्द का प्रारम्भिक प्रयोग ऋग्वेद में वर्णित एक समुदाय के लिए हुआ था।"
+      },
+      {
+        "type": "normal",
+        "question": "Which one of the following best explains why historians often compare themselves with detectives?",
+        "questionHindi": "निम्नलिखित में से कौन-सा कथन सर्वाधिक उपयुक्त रूप से स्पष्ट करता है कि इतिहासकार स्वयं की तुलना प्रायः जासूसों से क्यों करते हैं?",
+        "options": [
+          "Because they rely only on written records.",
+          "Because they reconstruct the past by analysing different types of evidence and clues.",
+          "Because they investigate only the lives of kings and queens.",
+          "Because they personally participate in archaeological excavations."
+        ],
+        "optionsHindi": [
+          "क्योंकि वे केवल लिखित अभिलेखों पर निर्भर रहते हैं।",
+          "क्योंकि वे विभिन्न प्रकार के स्रोतों एवं साक्ष्यों का विश्लेषण करके अतीत का पुनर्निर्माण करते हैं।",
+          "क्योंकि वे केवल राजाओं और रानियों का अध्ययन करते हैं।",
+          "क्योंकि वे स्वयं प्रत्येक उत्खनन में भाग लेते हैं।"
+        ],
+        "answer": 1,
+        "explanation": "Option B is correct.\n\nHistorians use manuscripts, inscriptions and archaeological evidence as clues to reconstruct the past, much like detectives solving a case.\n\nThe remaining options do not correctly describe the work of historians.",
+        "explanationHindi": "विकल्प B सही है।\n\nइतिहासकार पाण्डुलिपियों, अभिलेखों तथा पुरातात्त्विक साक्ष्यों को सुराग के रूप में प्रयोग करके अतीत का पुनर्निर्माण करते हैं, ठीक उसी प्रकार जैसे जासूस विभिन्न सुरागों के आधार पर किसी घटना का पता लगाते हैं।\n\nअन्य विकल्प इतिहासकारों के कार्य का सही वर्णन नहीं करते।"
+      }
+    ];
+
+    // ✅ Yaad rakhta hai ki HTML me pehle se MCQs the ya nahi (Mode 1 vs Mode 2)
+    const HTML_HAS_OWN_QUESTIONS = questions.length > 0;
+
+    // ════ STATE ════
+    let student = null, currentQ = 0, lang = 'hi';
+    let allTestsData = [];       // tests.json se load hue sabhi tests
+    let activeTestId = null;     // JSON se load hui current test ki ID
+    let activeTestTitle = "";    // current test ka title (preview me dikhane ke liye)
+    let answered = [], scores = { correct: 0, wrong: 0, marks: 0 };
+    let timerOn = true, timerInterval = null, timeLeft = 0, quizStart = 0;
+    let quizLocked = false, quizDone = false, activeFilter = null;
+    let selectedGender = "", selectedGenderEdit = "";
+    let pwWrongCount = 0;
+    let isVerifyingPassword = false;
+    let currentMode = 'haath';
+    let autoNextEnabled = false;
+    let selectedOptions = [];
+    let previewLang = 'hi';
+    let previewMode = 'haath';
+    let pdfLang = 'hi'; // default — quiz lang se sync hoga
+
+    // ════════════════════════════════════════════════════════
+    // ✅ CORE FIX: buildTableHTML — generates full table HTML
+    // Used in ALL contexts: quiz, preview, detail cards
+    // ════════════════════════════════════════════════════════
+    function buildTableHTML(q, l, compact) {
+      const headers = (l === 'hi') ? (q.tableHeadersHindi || q.tableHeaders) : q.tableHeaders;
+      const rows = q.tableRows;
+      const qLines = (l === 'hi' ? (q.questionHindi || q.question) : q.question).split('\n');
+      const askLine = qLines[qLines.length - 1];
+      const introLines = qLines.slice(0, -1).join('\n');
+
+      const tblClass = compact ? 'mcq-table' : 'mcq-table';
+      let html = '<div class="table-question-wrapper">';
+      if (introLines) {
+        html += `<div class="table-question-intro">${introLines.replace(/\n/g, '<br>')}</div>`;
+      }
+      html += `<div style="overflow-x:auto;"><table class="${tblClass}"><thead><tr>`;
+      headers.forEach(h => { html += `<th>${h}</th>`; });
+      html += '</tr></thead><tbody>';
+      rows.forEach(row => {
+        const cells = (l === 'hi') ? row.hi : row.en;
+        html += '<tr>';
+        cells.forEach((cell, ci) => {
+          html += ci === 0
+            ? `<td class="table-row-num">${cell}</td>`
+            : `<td>${cell}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += `</tbody></table></div>`;
+      html += `<div class="table-question-ask">${askLine}</div>`;
+      html += '</div>';
+      return html;
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ✅ CORE FIX: buildPreviewTableHTML — for preview cards (smaller)
+    // ════════════════════════════════════════════════════════
+    function buildPreviewTableHTML(q, l) {
+      const headers = (l === 'hi') ? (q.tableHeadersHindi || q.tableHeaders) : q.tableHeaders;
+      const rows = q.tableRows;
+      const qText = (l === 'hi' ? (q.questionHindi || q.question) : q.question);
+      const qLines = qText.split('\n');
+      const askLine = qLines[qLines.length - 1];
+      const introLines = qLines.slice(0, -1).join('\n');
+
+      let html = '';
+      if (introLines) {
+        html += `<div class="preview-q-text" style="padding-bottom:6px;">${introLines.replace(/\n/g, '<br>')}</div>`;
+      }
+      html += `<div class="preview-table-wrapper" style="overflow-x:auto;"><table class="preview-mcq-table"><thead><tr>`;
+      headers.forEach(h => { html += `<th>${h}</th>`; });
+      html += '</tr></thead><tbody>';
+      rows.forEach(row => {
+        const cells = (l === 'hi') ? row.hi : row.en;
+        html += '<tr>';
+        cells.forEach((cell, ci) => {
+          html += ci === 0
+            ? `<td style="background:var(--card);font-weight:700;text-align:center;min-width:28px;color:var(--accent);font-family:Rajdhani,sans-serif;font-size:0.72rem;padding:6px 5px;">${cell}</td>`
+            : `<td>${cell}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += `</tbody></table></div>`;
+      html += `<div class="preview-table-ask">${askLine}</div>`;
+      return html;
+    }
+
+    // ════ PREVIEW LANG TOGGLE ════
+    function setPreviewLang(l) {
+      previewLang = l; lang = l;
+      document.getElementById('pBtnEN').classList.toggle('active', l === 'en');
+      document.getElementById('pBtnHI').classList.toggle('active', l === 'hi');
+      const btnEN = document.getElementById('btnEN');
+      const btnHI = document.getElementById('btnHI');
+      if (btnEN) btnEN.classList.toggle('active', l === 'en');
+      if (btnHI) btnHI.classList.toggle('active', l === 'hi');
+      rebuildPreview();
+    }
+
+    // ════ PREVIEW MODE TOGGLE ════
+    function setPreviewMode(m) {
+      previewMode = m; currentMode = m;
+      document.getElementById('pModeHaath').classList.toggle('active-mode', m === 'haath');
+      document.getElementById('pModeSubmit').classList.toggle('active-mode', m === 'submit');
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ✅ FIXED: rebuildPreview — table questions now show actual table
+    // ════════════════════════════════════════════════════════
+    function rebuildPreview() {
+      const list = document.getElementById('previewList');
+      list.innerHTML = '';
+      const LBL = ['A', 'B', 'C', 'D'];
+
+      questions.forEach((q, i) => {
+        const blurred = i >= 2;
+        const opts = previewLang === 'hi' ? q.optionsHindi : q.options;
+        const isTable = q.type === 'table';
+
+        // Build question content area HTML
+        let qContentHTML = '';
+        if (isTable) {
+          // Table type: show table with badge
+          qContentHTML = `<div style="padding:10px 18px 4px;">
+            <span style="background:var(--accent);color:#0f1117;font-size:0.68rem;padding:2px 9px;border-radius:10px;font-family:Rajdhani,sans-serif;font-weight:700;letter-spacing:1px;">📊 TABLE Q</span>
+          </div>`;
+          qContentHTML += buildPreviewTableHTML(q, previewLang);
+        } else {
+          const txt = (previewLang === 'hi' ? (q.questionHindi || q.question) : q.question).replace(/\n/g, '<br>');
+          qContentHTML = `<div class="preview-q-text">${txt}</div>`;
+        }
+
+        const optsHTML = (opts || []).map((o, oi) =>
+          `<div class="preview-opt" onclick="handlePreviewOptionClick()">
+            <div class="preview-opt-lbl">${LBL[oi]}</div>
+            <span>${o}</span>
+          </div>`
+        ).join('');
+
+        list.innerHTML += `
+          <div class="preview-q-card">
+            <div class="preview-q-header">
+              <span class="preview-q-num">Q ${i + 1}</span>
+              ${isTable ? '<span style="background:var(--accent2);color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:8px;font-family:Rajdhani,sans-serif;font-weight:700;">📊 TABLE</span>' : ''}
+              ${blurred ? '<span class="preview-lock">🔒 Register करें</span>' : ''}
+            </div>
+            <div class="${blurred ? 'preview-blur' : ''}">
+              ${qContentHTML}
+              <div class="preview-opts">${optsHTML}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    // ════ BOOT ════
+    window.onload = async function () {
+      try {
+        const saved = localStorage.getItem("upsc_student");
+        if (saved) { student = JSON.parse(saved); updateProfileFAB(); }
+      } catch (e) { student = null; }
+
+      // ✅ Share link se aaya hai? (?test=ID) — to seedha wahi test load karo
+      const urlParams = new URLSearchParams(window.location.search);
+      const sharedTestId = urlParams.get("test");
+      if (sharedTestId) {
+        await fetchAllTestsJSON();
+        const found = allTestsData.find(t => String(t.id) === sharedTestId);
+        if (found) loadTestIntoQuestions(found);
+      }
+
+      if (questions.length > 0) {
+        // ══ MODE 1: HTML me pehle se MCQs hain — normal home page dikhao ══
+        rebuildPreview();
+        renderPdfLinkButtons();
+        document.getElementById("previewQCount").textContent = questions.length;
+        showScreen("screenPreview");
+      } else {
+        // ══ MODE 2: HTML me MCQs nahi — JSON list hi home page banao ══
+        await fetchAllTestsJSON();
+        renderTestListScreen();
+        showScreen("screenTestList");
+      }
+
+      updateFabRegisterVisibility();
+      createAllTestFab();
+    };
+
+    function updateFabRegisterVisibility() {
+      const fab = document.getElementById("fabRegister");
+      if (document.getElementById("screenPreview").classList.contains("active")) {
+        fab.classList.add("visible");
+      } else {
+        fab.classList.remove("visible");
+      }
+    }
+
+    const ALL_TEST_URL = "https://dineshias96.github.io/All_Test_File/Here.html";
+
+    function createAllTestFab() {
+      const fab = document.getElementById("allTestFab");
+      if (!fab) return;
+      fab.style.cssText = "position:fixed;top:74px;left:18px;z-index:800;width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;background:#1a1d27;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px #00000066;transition:all .2s;gap:1px;";
+      fab.innerHTML = `<span style="font-size:1.1rem;line-height:1;">📋</span><span style="font-size:0.42rem;color:#3b82f6;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:0.5px;line-height:1.2;">ALL TEST</span>`;
+      fab.onclick = (e) => { e.stopPropagation(); toggleAllTestMenu(); };
+      fab.onmouseover = () => { fab.style.transform = "scale(1.08)"; fab.style.borderColor = "#60a5fa"; };
+      fab.onmouseout = () => { fab.style.transform = "scale(1)"; fab.style.borderColor = "#3b82f6"; };
+
+      // ✅ Dropdown menu — 2 options
+      let menu = document.getElementById("allTestMenu");
+      if (!menu) {
+        menu = document.createElement("div");
+        menu.id = "allTestMenu";
+        menu.style.cssText = "position:fixed;top:128px;left:18px;z-index:799;background:#1a1d27;border:1px solid #2e3250;border-radius:12px;padding:8px;min-width:220px;box-shadow:0 8px 30px #00000088;display:none;";
+        menu.innerHTML = `
+          <button onclick="window.open(ALL_TEST_URL,'_blank');closeAllTestMenu();" style="width:100%;text-align:left;background:transparent;border:none;color:#e8eaf6;padding:9px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:0.85rem;cursor:pointer;">🔗 External Test Link</button>
+          <button onclick="openAllTestJsonList();closeAllTestMenu();" style="width:100%;text-align:left;background:transparent;border:none;color:#e8eaf6;padding:9px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:0.85rem;cursor:pointer;">📂 इस Site के Tests (JSON)</button>
+        `;
+        document.body.appendChild(menu);
+      }
+    }
+
+    function toggleAllTestMenu() {
+      const m = document.getElementById("allTestMenu");
+      if (m) m.style.display = m.style.display === "block" ? "none" : "block";
+    }
+    function closeAllTestMenu() {
+      const m = document.getElementById("allTestMenu");
+      if (m) m.style.display = "none";
+    }
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#allTestFab") && !e.target.closest("#allTestMenu")) closeAllTestMenu();
+    });
+
+    // ════ MULTI-TEST JSON HELPERS ════
+    async function fetchAllTestsJSON() {
+      if (allTestsData.length) return allTestsData; // ek baar load ho gaya to dobara mat karo
+      try {
+        const res = await fetch(TESTS_JSON_URL, { cache: "no-store" });
+        allTestsData = await res.json();
+      } catch (e) {
+        allTestsData = [];
+        console.log("tests.json load nahi hui:", e);
+      }
+      return allTestsData;
+    }
+
+    function loadTestIntoQuestions(test) {
+      questions.length = 0;
+      (test.questions || []).forEach(q => questions.push(q));
+      activeTestId = test.id || null;
+      activeTestTitle = test.title || TEST_NAME;
+      const titleEl = document.getElementById("previewTitleText");
+      if (titleEl) titleEl.textContent = activeTestTitle;
+      const shareWrap = document.getElementById("previewShareBtnWrap");
+      if (shareWrap) shareWrap.style.display = activeTestId ? "block" : "none";
+    }
+
+    function renderTestListScreen() {
+      const wrap = document.getElementById("testListWrap");
+      if (!wrap) return;
+      wrap.innerHTML = "";
+      if (HTML_HAS_OWN_QUESTIONS) {
+        wrap.innerHTML += `<button class="btn-secondary" style="max-width:300px;margin:0 auto 16px;display:block;" onclick="showScreen('screenPreview')">← वापस Home Test पर जाएं</button>`;
+      }
+      if (!allTestsData.length) {
+        wrap.innerHTML += `<div style="text-align:center;color:var(--muted);padding:40px;">📭 अभी कोई Test उपलब्ध नहीं है (tests.json check karo)</div>`;
+        return;
+      }
+      allTestsData.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "preview-q-card";
+        card.style.cssText = "cursor:pointer;opacity:1;";
+        card.innerHTML = `
+          <div class="preview-q-header">
+            <span class="preview-q-num">📘 ${(t.questions || []).length} Q</span>
+            <span style="margin-left:auto;font-size:0.8rem;color:var(--accent2);cursor:pointer;" onclick="event.stopPropagation();shareTestLink('${t.id}')">🔗 Share</span>
+          </div>
+          <div class="preview-q-text" style="font-weight:700;color:var(--gold);">${t.title}</div>
+        `;
+        card.onclick = () => openTestFromList(t);
+        wrap.appendChild(card);
+      });
+    }
+
+    function openTestFromList(test) {
+      loadTestIntoQuestions(test);
+      rebuildPreview();
+      renderPdfLinkButtons();
+      document.getElementById("previewQCount").textContent = questions.length;
+      showScreen("screenPreview");
+      updateFabRegisterVisibility();
+    }
+
+    function shareTestLink(id) {
+      const url = window.location.origin + window.location.pathname + "?test=" + encodeURIComponent(id);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert("✅ Link copy ho gaya:\n\n" + url);
+        }).catch(() => { prompt("Yeh link copy karo:", url); });
+      } else {
+        prompt("Yeh link copy karo:", url);
+      }
+    }
+
+    async function openAllTestJsonList() {
+      await fetchAllTestsJSON();
+      renderTestListScreen();
+      showScreen("screenTestList");
+    }
+
+    function handlePreviewOptionClick() {
+      if (student) { loadPasswordScreen(); } else { showScreen("screenReg"); updateFabRegisterVisibility(); }
+    }
+
+    function handleStartClick() {
+      if (student) { loadPasswordScreen(); } else { showScreen("screenReg"); }
+      updateFabRegisterVisibility();
+    }
+
+    function loadPasswordScreen() {
+      isVerifyingPassword = false;
+      document.getElementById("pwInput").value = "";
+      document.getElementById("pwError").classList.remove("show");
+      document.getElementById("pwLoadingInfo").style.display = "none";
+      const btn = document.getElementById("pwBtn");
+      const spinner = document.getElementById("pwBtnSpinner");
+      const btnText = document.getElementById("pwBtnText");
+      btn.disabled = false; spinner.style.display = "none"; btnText.textContent = "🔓 Start Test";
+      showScreen("screenPW");
+      updateFabRegisterVisibility();
+
+      const contactDiv = document.getElementById("pwContactBtns");
+      const row = document.getElementById("pwContactRow");
+      contactDiv.style.display = "block";
+      row.innerHTML = `<div style="color:var(--muted);font-size:.78rem;text-align:center;width:100%;">
+    <span class="spinner-dark" style="border-top-color:var(--accent);border-color:var(--border);display:inline-block;width:14px;height:14px;"></span>
+    &nbsp;Loading...
+  </div>`;
+
+      // ✅ Hamesha fresh load karo — cache mat rakho
+      CONTACT_CONFIG = null;
+      loadContactConfig().then(() => setupContactButtons());
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const el = document.getElementById(id); if (el) el.classList.add("active");
+      updateFabRegisterVisibility();
+    }
+
+    function setupContactButtons() {
+      const row = document.getElementById("pwContactRow");
+      const g = (student ? student.gender : selectedGender) || "boys";
+      const cfg = CONTACT_CONFIG ? CONTACT_CONFIG[g] : null;
+      const mode = cfg ? cfg.mode : (g === "girls" ? "sms" : "telegram");
+
+      const name = student?.name || '';
+      const mobile = student?.mobile || '';
+      const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      // Messages
+      const waSimple = cfg?.waSimpleText || `Hello Sir ji,\nMujhe ${TEST_NAME} ka password chahiye.`;
+      const waPrefix = cfg?.waDetailPrefix || `🙏 Sir ji,\nMujhe *${TEST_NAME}* ka password chahiye.`;
+      const smsSimple = cfg?.smsSimpleText || `Hello Sir ji, Mujhe ${TEST_NAME} ka password chahiye.`;
+      const smsPrefix = cfg?.smsDetailPrefix || `Hello Sir ji, Mujhe ${TEST_NAME} ka password chahiye.`;
+
+      const detailMsg = encodeURIComponent(
+        `${waPrefix}\n\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n⚧ Gender: ${g}\n🕐 Time: ${now}`
+      );
+      const simpleMsg = encodeURIComponent(waSimple);
+      const smsDetailMsg = encodeURIComponent(
+        `${smsPrefix}\n\nName: ${name}\nMobile: ${mobile}\nGender: ${g}\nTime: ${now}`
+      );
+      const smsSimpleMsg = encodeURIComponent(smsSimple);
+      let html = '';
+
+      if (mode === "telegram") {
+        const tgUrl = cfg?.telegramUrl || "https://t.me/IASDineshsharma";
+        html = `<button class="btn-telegram" style="width:100%;"
+      onclick="window.open('${tgUrl}','_blank')">
+      📲 Telegram par Contact Karen
+    </button>`;
+
+      } else if (mode === "sms_simple") {
+        const smsNum = cfg?.smsNumber || "+919649346723";
+        if (isMobile) {
+          const smsLink = isIOS
+            ? `sms:${smsNum}&body=${smsSimpleMsg}`
+            : `sms:${smsNum}?body=${smsSimpleMsg}`;
+          html = `<a href="${smsLink}" style="flex:1;display:block;text-decoration:none;">
+      <button class="btn-whatsapp" style="width:100%;background:#5856d6;">
+        📱 SMS par Contact Karen
+      </button>
+    </a>`;
+        } else {
+          const tgUrl = cfg?.telegramUrl || "https://t.me/IASDineshsharma";
+          html = `<button class="btn-telegram" style="width:100%;"
+      onclick="window.open('${tgUrl}','_blank')">
+      📲 Telegram par Contact Karen
+    </button>`;
+        }
+
+      } else if (mode === "sms_detail") {
+        const smsNum = cfg?.smsNumber || "+919649346723";
+        if (isMobile) {
+          const smsLink = isIOS
+            ? `sms:${smsNum}&body=${smsDetailMsg}`
+            : `sms:${smsNum}?body=${smsDetailMsg}`;
+          html = `<a href="${smsLink}" style="flex:1;display:block;text-decoration:none;">
+      <button class="btn-whatsapp" style="width:100%;background:#5856d6;">
+        📱 SMS par Contact Karen
+      </button>
+    </a>`;
+        } else {
+          const tgUrl = cfg?.telegramUrl || "https://t.me/IASDineshsharma";
+          html = `<button class="btn-telegram" style="width:100%;"
+      onclick="window.open('${tgUrl}','_blank')">
+      📲 Telegram par Contact Karen
+    </button>`;
+        }
+
+      } else if (mode === "whatsapp_detail") {
+        const waNum = cfg?.whatsappDetail || "919649346723";
+        html = `<button class="btn-whatsapp" style="width:100%;"
+      onclick="window.open('https://wa.me/${waNum}?text=${detailMsg}','_blank')">
+      💬 WhatsApp par Contact Karen
+    </button>`;
+
+      } else if (mode === "whatsapp_simple") {
+        const waNum = cfg?.whatsappSimple || "919649346723";
+        html = `<button class="btn-whatsapp" style="width:100%;"
+      onclick="window.open('https://wa.me/${waNum}?text=${simpleMsg}','_blank')">
+      💬 WhatsApp par Contact Karen
+    </button>`;
+      }
+
+      document.getElementById("pwContactRow").innerHTML = html;
+
+      // ✅ Girls ko animated number box dikhao
+      const oldBox = document.getElementById("girlsContactNum");
+      if (oldBox) oldBox.remove();
+
+      if (g === "girls") {
+        let displayNum = "";
+        if (mode === "sms_simple" || mode === "sms_detail") {
+          displayNum = cfg?.smsNumber || "";
+        } else if (mode === "whatsapp_simple") {
+          displayNum = cfg?.whatsappSimple || "";
+        } else if (mode === "whatsapp_detail") {
+          displayNum = cfg?.whatsappDetail || "";
+        }
+        if (displayNum) {
+          const shortNum = String(displayNum).replace(/\D/g, "").slice(-10);
+          const box = document.createElement("div");
+          box.id = "girlsContactNum";
+          box.style.cssText = `
+            position:relative;overflow:hidden;
+            margin-top:14px;padding:14px 18px;
+            text-align:center;border-radius:12px;
+            background:var(--card2);
+            border-top:1px solid rgba(255,49,49,0.3);
+            border-right:1px solid rgba(0,255,255,0.3);
+            border-bottom:1px solid rgba(57,255,20,0.3);
+            border-left:1px solid rgba(255,255,113,0.3);
+            font-family:'Rajdhani',sans-serif;
+          `;
+          box.innerHTML = `
+            <span class="gc-top"></span>
+            <span class="gc-right"></span>
+            <span class="gc-bottom"></span>
+            <span class="gc-left"></span>
+            <div style="font-size:0.78rem;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">📞 Sir ko massage karen</div>
+            <canvas id="gcNumCanvas" height="44" style="display:block;margin:0 auto;max-width:100%;"></canvas>
+           <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;">
+              <button id="gcCopyBtn" onclick="copyGirlsNumber()" style="background:#1e2a4a;border:1px solid #fbbf2466;border-radius:8px;padding:7px 18px;color:#fbbf24;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;">📋 Copy Number</button>
+            </div>
+          `;
+          document.getElementById("pwContactBtns").appendChild(box);
+
+          // Canvas pe number draw karo — copy-proof
+          setTimeout(() => {
+            const canvas = document.getElementById("gcNumCanvas");
+            if (!canvas) return;
+            const containerW = box.offsetWidth || 260;
+            canvas.width = containerW - 36;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Background transparent rehega
+            // Number draw karo
+            const spaced = shortNum.split('').join('  ');
+            ctx.font = "bold 28px 'Rajdhani', sans-serif";
+            ctx.fillStyle = "#fbbf24";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(spaced, canvas.width / 2, 22);
+            window._girlsNum = shortNum;
+            // Block copy on canvas too
+            canvas.addEventListener("contextmenu", e => e.preventDefault(), true);
+            canvas.addEventListener("selectstart", e => e.preventDefault(), true);
+            canvas.style.userSelect = "none";
+            canvas.style.webkitUserSelect = "none";
+            canvas.style.pointerEvents = "none"; // no touch/mouse interaction at all
+          }, 120);
+        }
+      }
+    }
+    function openWhatsApp() {
+      const msg = encodeURIComponent(`Hello, मुझे UPSC MCQ Quiz (${TEST_NAME}) का password चाहिए।\nनाम: ${student?.name || ''}\nMobile: ${student?.mobile || ''}`);
+      window.open(`https://wa.me/919649346723?text=${msg}`, "_blank");
+    }
+    function openTelegram() { window.open(`https://t.me/upsc_quiz_support`, "_blank"); }
+
+    function selectGender(g) {
+      selectedGender = g;
+      document.getElementById("gBoy").className = "gender-opt" + (g === "boys" ? " selected-m" : "");
+      document.getElementById("gGirl").className = "gender-opt" + (g === "girls" ? " selected-f" : "");
+    }
+
+    async function submitRegistration() {
+      const name = document.getElementById("regName").value.trim();
+      const mobile = document.getElementById("regMobile").value.trim();
+      const err = document.getElementById("regError");
+      if (!name || !mobile || mobile.length !== 10 || !selectedGender) {
+        err.textContent = "⚠ सभी fields भरें और 10-digit mobile number दें";
+        err.classList.add("show"); return;
+      }
+      err.classList.remove("show");
+      const btn = document.getElementById("regBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-dark" style="border-top-color:#0f1117;"></span>&nbsp; Registering...';
+      const id = "STU_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5).toUpperCase();
+      const r = await api({ action: "register", id, name, mobile, gender: selectedGender, dpUrl: "" });
+      if (r.ok) {
+        student = { id, name, mobile, gender: selectedGender };
+        localStorage.setItem("upsc_student", JSON.stringify(student));
+        updateProfileFAB();
+        loadPasswordScreen();
+      } else {
+        err.textContent = "❌ Server error: " + (r.error || "retry");
+        err.classList.add("show");
+      }
+      btn.disabled = false;
+      btn.innerHTML = "Register करें →";
+    }
+
+    function getNextUnattemptedIndex(currentIndex) {
+      for (let i = currentIndex + 1; i < questions.length; i++) {
+        if (currentMode === 'submit') { if (selectedOptions[i] === null) return i; }
+        else { if (!answered[i] || answered[i].skipped) return i; }
+      }
+      for (let i = 0; i <= currentIndex; i++) {
+        if (currentMode === 'submit') { if (selectedOptions[i] === null) return i; }
+        else { if (!answered[i] || answered[i].skipped) return i; }
+      }
+      return -1;
+    }
+
+    function togglePWVis() {
+      const i = document.getElementById("pwInput");
+      i.type = i.type === "password" ? "text" : "password";
+    }
+
+    async function checkPassword() {
+      if (isVerifyingPassword) return;
+      const entered = document.getElementById("pwInput").value.trim();
+      const err = document.getElementById("pwError");
+      const loadingInfo = document.getElementById("pwLoadingInfo");
+      const btn = document.getElementById("pwBtn");
+      const spinner = document.getElementById("pwBtnSpinner");
+      const btnText = document.getElementById("pwBtnText");
+      if (!entered) { err.textContent = "⚠ Password डालें"; err.classList.add("show"); return; }
+      isVerifyingPassword = true;
+      btn.disabled = true; spinner.style.display = "inline-block"; btnText.textContent = "🔒 Verifying...";
+      loadingInfo.style.display = "block"; err.classList.remove("show");
+      const r = await api({ action: "verifyPassword", gender: student?.gender || selectedGender, entered });
+      loadingInfo.style.display = "none";
+      if (r.ok && r.token) {
+        await api({ action: "logPasswordCorrect", name: student?.name || "", mobile: student?.mobile || "", gender: student?.gender || "" });
+        err.classList.remove("show");
+        document.getElementById("pwContactBtns").style.display = "none";
+        pwWrongCount = 0;
+        isVerifyingPassword = false; btn.disabled = false; spinner.style.display = "none"; btnText.textContent = "🔓 Start Test";
+        startQuiz();
+      } else {
+        pwWrongCount++;
+        err.textContent = r.error === "wrong" ? "❌ Password गलत है — नीचे दिए button से contact करें" : "❌ Password गलत है — नीचे दिए button से contact करें";
+        err.classList.add("show");
+        document.getElementById("pwContactBtns").style.display = "block";
+        const device = navigator.userAgent.substring(0, 80);
+        if (r.error === "wrong") {
+          api({ action: "wrongPassword", studentId: student?.id || "unknown", name: student?.name || "unknown", mobile: student?.mobile || "unknown", gender: student?.gender || selectedGender || "unknown", entered, device });
+        }
+        if (pwWrongCount >= 2) {
+          const gdr = (student?.gender || selectedGender || "girls").toLowerCase();
+          const cfg2 = CONTACT_CONFIG ? CONTACT_CONFIG[gdr] : null;
+          const mode2 = (cfg2?.mode || "telegram").toLowerCase();
+          const autoNow = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+          const autoWaPrefix = cfg2?.waDetailPrefix || `🚨 *Sir ji !*\n\n❌ mene 2 time try kiya, password wrong aa raha hai\n👉 *Plz correct password de dijiye*`;
+          const autoSmsPrefix = cfg2?.smsDetailPrefix || `Sir ji, 2 time wrong password try kiya. Plz correct password de dijiye.`;
+
+          const autoMsg = encodeURIComponent(
+            `${autoWaPrefix}\n\n━━━━━━━━━━━━━━━\n👤 *Name:* ${student?.name || ""}\n⚧ *Gender:* ${gdr}\n📱 *Mobile:* ${student?.mobile || ""}\n🕐 *Time:* ${autoNow}\n🎓 *Test:* ${TEST_NAME}\n━━━━━━━━━━━━━━━`
+          );
+          const autoSmsMsg = encodeURIComponent(
+            `${autoSmsPrefix}\n\nName: ${student?.name || ""}\nGender: ${gdr}\nMobile: ${student?.mobile || ""}\nTime: ${autoNow}\nTest: ${TEST_NAME}`
+          );
+
+          const isIOS2 = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          const isMobile2 = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+          if (mode2 === "whatsapp_detail") {
+            const waNum = cfg2?.whatsappDetail || "919649346723";
+            window.open(`https://wa.me/${waNum}?text=${autoMsg}`, "_blank");
+
+          } else if (mode2 === "whatsapp_simple") {
+            const waNum = cfg2?.whatsappSimple || "919649346723";
+            const simpleAutoMsg = encodeURIComponent(`Hello Sir ji,\nMujhe ${TEST_NAME} ka password chahiye.`);
+            window.open(`https://wa.me/${waNum}?text=${simpleAutoMsg}`, "_blank");
+          } else if (mode2 === "sms_simple" || mode2 === "sms_detail") {
+            const smsNum = cfg2?.smsNumber || "+919649346723";
+            const smsBody = mode2 === "sms_detail" ? autoSmsMsg : encodeURIComponent(smsSimple);
+            if (isMobile2) {
+              const smsL = isIOS2
+                ? `sms:${smsNum}&body=${smsBody}`
+                : `sms:${smsNum}?body=${smsBody}`;
+              window.location.href = smsL;
+            } else {
+              const tgUrl = cfg2?.telegramUrl || "https://t.me/IASDineshsharma";
+              window.open(tgUrl, "_blank");
+            }
+
+          } else {
+            // telegram (default)
+            const tgUrl = cfg2?.telegramUrl || "https://t.me/IASDineshsharma";
+            window.open(tgUrl, "_blank");
+          }
+
+          pwWrongCount = 0;
+        }
+        isVerifyingPassword = false; btn.disabled = false; spinner.style.display = "none"; btnText.textContent = "🔓 Start Test";
+      }
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById("modeHaathBtn").classList.toggle("active-mode", mode === 'haath');
+      document.getElementById("modeSubmitBtn").classList.toggle("active-mode", mode === 'submit');
+      if (document.getElementById('pModeHaath')) {
+        document.getElementById('pModeHaath').classList.toggle('active-mode', mode === 'haath');
+        document.getElementById('pModeSubmit').classList.toggle('active-mode', mode === 'submit');
+      }
+      initQuiz();
+    }
+
+    function selectGenderEdit(g) {
+      selectedGenderEdit = g;
+      document.getElementById("eBoy").className = "gender-opt" + (g === "boys" ? " selected-m" : "");
+      document.getElementById("eGirl").className = "gender-opt" + (g === "girls" ? " selected-f" : "");
+    }
+
+    function openEdit() {
+      closeDropdown();
+      if (!student) return;
+      document.getElementById("editName").value = student.name || "";
+      document.getElementById("editMobile").value = student.mobile || "";
+      selectedGenderEdit = student.gender || "";
+      selectGenderEdit(selectedGenderEdit);
+      showScreen("screenEdit");
+    }
+
+    function closeEdit() { showScreen("screenPW"); }
+
+    async function submitEdit() {
+      const name = document.getElementById("editName").value.trim();
+      const mobile = document.getElementById("editMobile").value.trim();
+      const err = document.getElementById("editError");
+      if (!name || !mobile || mobile.length !== 10 || !selectedGenderEdit) { err.textContent = "⚠ सभी fields भरें"; err.classList.add("show"); return; }
+      err.classList.remove("show");
+      const btn = document.getElementById("editBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-dark" style="border-top-color:#0f1117;"></span>&nbsp; Saving...';
+      const r = await api({ action: "editProfile", id: student.id, name, mobile, gender: selectedGenderEdit, dpUrl: "" });
+      if (r.ok) {
+        student = { ...student, name, mobile, gender: selectedGenderEdit };
+        localStorage.setItem("upsc_student", JSON.stringify(student));
+        updateProfileFAB(); loadPasswordScreen();
+      } else {
+        err.textContent = "❌ Error: " + (r.error || "retry"); err.classList.add("show");
+        btn.disabled = false; btn.innerHTML = "Save Changes →";
+      }
+    }
+
+    function updateProfileFAB() {
+      const fab = document.getElementById("profileFab");
+      if (!student) { fab.style.display = "none"; return; }
+      fab.style.display = "flex";
+      document.getElementById("pfEmoji").textContent = student.gender === "girls" ? "👧" : "👦";
+      document.getElementById("pdName").textContent = student.name || "—";
+      document.getElementById("pdMobile").textContent = student.mobile || "—";
+      document.getElementById("pdGender").textContent = student.gender === "girls" ? "👧 Girl" : "👦 Boy";
+    }
+
+    function toggleProfileDropdown() { document.getElementById("profileDropdown").classList.toggle("open"); }
+    function closeDropdown() { document.getElementById("profileDropdown").classList.remove("open"); }
+    document.addEventListener("click", e => {
+      if (!e.target.closest("#profileFab") && !e.target.closest("#profileDropdown")) closeDropdown();
+    });
+
+    function closeDropdownAndNewReg() {
+      closeDropdown();
+      localStorage.removeItem("upsc_student");
+      student = null; selectedGender = "";
+      document.getElementById("regName").value = "";
+      document.getElementById("regMobile").value = "";
+      document.getElementById("gBoy").className = "gender-opt";
+      document.getElementById("gGirl").className = "gender-opt";
+      document.getElementById("profileFab").style.display = "none";
+      showScreen("screenPreview");
+    }
+
+    function startQuiz() {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("mainQuiz").style.display = "block";
+      document.getElementById("fabTimer").style.display = "flex";
+      document.getElementById("fabRegister").classList.remove("visible");
+      updateProfileFAB();
+      currentMode = previewMode;
+      document.getElementById("modeHaathBtn").classList.toggle("active-mode", currentMode === 'haath');
+      document.getElementById("modeSubmitBtn").classList.toggle("active-mode", currentMode === 'submit');
+      lang = previewLang;
+      document.getElementById("btnEN").classList.toggle("active", lang === 'en');
+      document.getElementById("btnHI").classList.toggle("active", lang === 'hi');
+      initQuiz();
+    }
+
+    function initQuiz() {
+      answered = questions.map(() => null);
+      selectedOptions = questions.map(() => null);
+      scores = { correct: 0, wrong: 0, marks: 0 };
+      quizLocked = false; quizDone = false; currentQ = 0; activeFilter = null;
+      timeLeft = Math.round((questions.length / TOTAL_Q_REF) * TOTAL_TIME);
+      quizStart = Date.now();
+      clearInterval(timerInterval);
+      document.getElementById("quizCard").style.display = "";
+      document.getElementById("resultScreen").classList.remove("show");
+      document.getElementById("detailsSection").innerHTML = "";
+      document.getElementById("detailsSection").classList.remove("show");
+      document.getElementById("filterBar").classList.remove("show");
+      document.getElementById("qNav").style.display = "";
+      document.getElementById("scoreBar").style.display = "";
+      updateModeBadge();
+      if (currentMode === 'submit') {
+        document.getElementById("correctQ").textContent = "—";
+        document.getElementById("wrongQ").textContent = "—";
+        document.getElementById("marksVal").textContent = "—";
+      }
+      buildNav(); loadQuestion(0); updateScore(); updateTimerDisplay(); startTimer();
+    }
+
+    function updateModeBadge() {
+      const badge = document.getElementById("modeBadgeDisplay");
+      if (currentMode === 'haath') {
+        badge.className = "mode-badge-display haath";
+        badge.textContent = "⚡ हाथो-हाथ Mode — Click करते ही Answer दिखेगा";
+      } else {
+        badge.className = "mode-badge-display submit";
+        badge.textContent = "📝 Submit Mode — सभी attempt करें, फिर Submit करें";
+      }
+    }
+
+    function fmtTime(s) {
+      const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+      return [h, m, sec].map(x => String(x).padStart(2, '0')).join(':');
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!timerOn || quizDone) return;
+        timeLeft--; updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); autoSubmit(); }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const el = document.getElementById("timerDisplay");
+      el.textContent = fmtTime(Math.max(0, timeLeft));
+      el.className = "t-time" + (timeLeft <= 300 ? " warn" : "");
+    }
+
+    function toggleTimer() {
+      timerOn = !timerOn;
+      document.getElementById("fabBtn").className = "fab-btn " + (timerOn ? "on" : "off");
+      document.getElementById("timerBubble").classList.toggle("hidden", !timerOn);
+    }
+
+    function autoSubmit() {
+      if (currentMode === 'submit') { processSubmitModeAnswers(); }
+      else { answered.forEach((a, i) => { if (!a) answered[i] = { selected: -1, correct: false, skipped: true }; }); }
+      quizLocked = true;
+      document.getElementById("toastOverlay").classList.add("show");
+      document.getElementById("autoSubmitToast").classList.add("show");
+    }
+
+    function closeToast() {
+      document.getElementById("toastOverlay").classList.remove("show");
+      document.getElementById("autoSubmitToast").classList.remove("show");
+      showResult();
+    }
+
+    function buildNav() {
+      const nav = document.getElementById("qNav"); nav.innerHTML = "";
+      questions.forEach((_, i) => {
+        const d = document.createElement("div");
+        d.className = "q-dot" + (i === currentQ ? " active" : "");
+        d.textContent = i + 1;
+        d.onclick = () => { if (!quizDone) loadQuestion(i); };
+        nav.appendChild(d);
+      });
+      document.getElementById("totalQ").textContent = questions.length;
+    }
+
+    function updateNav() {
+      document.querySelectorAll(".q-dot").forEach((d, i) => {
+        d.className = "q-dot" + (quizLocked ? " locked" : "");
+        if (i === currentQ) d.classList.add("active");
+        if (currentMode === 'submit') {
+          if (selectedOptions[i] !== null) d.classList.add("visited");
+          else if (i < currentQ) d.classList.add("skipped");
+        } else {
+          const a = answered[i];
+          if (a) {
+            if (a.skipped) d.classList.add("skipped");
+            else if (a.correct) d.classList.add("answered-c");
+            else d.classList.add("answered-w");
+          }
+        }
+      });
+    }
+
+    function updateScore() {
+      if (currentMode === 'submit' && !quizDone) {
+        document.getElementById("correctQ").textContent = "—";
+        document.getElementById("wrongQ").textContent = "—";
+        document.getElementById("marksVal").textContent = "—";
+        return;
+      }
+      document.getElementById("correctQ").textContent = scores.correct;
+      document.getElementById("wrongQ").textContent = scores.wrong;
+      document.getElementById("marksVal").textContent = scores.marks.toFixed(2);
+    }
+
+    function loadQuestion(idx) {
+      currentQ = idx;
+      document.getElementById("qLabel").textContent = "Q " + (idx + 1);
+      renderQuestion(); renderOptions(); hideAnswer(); updateNav();
+      if (currentMode === 'haath' && answered[idx] && !answered[idx].skipped) {
+        revealAnswer(answered[idx].selected, false);
+      }
+      if (currentMode === 'submit' && selectedOptions[idx] !== null) {
+        const optEl = document.getElementById("opt_" + selectedOptions[idx]);
+        if (optEl) optEl.classList.add("selected-submit");
+      }
+      updateActionBar();
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ✅ FIXED: renderQuestion — table questions now use buildTableHTML
+    // Table persists after answer reveal because it's in questionText div
+    // which is NOT touched by revealAnswer() or showAnswerBox()
+    // ════════════════════════════════════════════════════════
+    function renderQuestion() {
+      const q = questions[currentQ];
+
+      if (q.type === 'table') {
+        // ✅ Full table HTML rendered into questionText div
+        document.getElementById("questionText").innerHTML = buildTableHTML(q, lang, false);
+      } else {
+        const qText = lang === 'hi' ? (q.questionHindi || q.question || '') : (q.question || '');
+        document.getElementById("questionText").innerHTML = qText.replace(/\n/g, "<br>");
+      }
+      document.getElementById("qTagText").textContent = q.tag || "";
+    }
+
+    function renderOptions() {
+      const q = questions[currentQ];
+      const opts = lang === 'hi' ? q.optionsHindi : q.options;
+      const wrap = document.getElementById("optionsWrap"); wrap.innerHTML = "";
+      const locked = quizLocked || (currentMode === 'haath' && answered[currentQ] && !answered[currentQ].skipped);
+      ["A", "B", "C", "D"].forEach((lbl, i) => {
+        const div = document.createElement("div");
+        div.className = "option" + (locked ? " disabled" : "");
+        div.id = "opt_" + i;
+        div.onclick = () => handleOptionClick(i);
+        div.innerHTML = `<div class="opt-label">${lbl}</div><div class="opt-text">${opts[i]}</div><div class="opt-icon" id="icon_${i}"></div>`;
+        wrap.appendChild(div);
+      });
+    }
+
+    function handleOptionClick(idx) {
+      if (quizLocked) return;
+      if (currentMode === 'submit') {
+        if (selectedOptions[currentQ] === idx) {
+          selectedOptions[currentQ] = null;
+          document.querySelectorAll(".option").forEach(o => o.classList.remove("selected-submit"));
+        } else {
+          document.querySelectorAll(".option").forEach(o => o.classList.remove("selected-submit"));
+          selectedOptions[currentQ] = idx;
+          const el = document.getElementById("opt_" + idx);
+          if (el) el.classList.add("selected-submit");
+          if (autoNextEnabled && currentQ < questions.length - 1) {
+            setTimeout(() => { if (!quizLocked) loadQuestion(currentQ + 1); }, 500);
+          }
+        }
+        updateNav(); updateActionBar(); return;
+      }
+      if (answered[currentQ] && !answered[currentQ].skipped) return;
+      revealAnswer(idx, true);
+      const q = questions[currentQ];
+      const opts = lang === 'hi' ? q.optionsHindi : q.options;
+      const qText = lang === 'hi' ? (q.questionHindi || q.question || '') : (q.question || '');
+      api({
+        action: "logAnswer",
+        name: student?.name || "", mobile: student?.mobile || "", gender: student?.gender || "",
+        qNum: String(currentQ + 1),
+        qText: qText + "\n\nA) " + opts[0] + "\nB) " + opts[1] + "\nC) " + opts[2] + "\nD) " + opts[3],
+        chosen: ["A", "B", "C", "D"][idx], correct: ["A", "B", "C", "D"][q.answer], isRight: String(idx === q.answer)
+      });
+      if (autoNextEnabled) {
+        setTimeout(() => {
+          if (!quizDone && !(currentQ === questions.length - 1)) nextQuestion();
+        }, 700);
+      }
+      setTimeout(checkIfAllDone, 300);
+    }
+
+    function skipQuestion() {
+      if (quizLocked) return;
+      if (currentMode === 'submit') {
+        selectedOptions[currentQ] = null;
+        document.querySelectorAll(".option").forEach(o => o.classList.remove("selected-submit"));
+        updateNav(); updateActionBar();
+      }
+      if (currentQ < questions.length - 1) loadQuestion(currentQ + 1);
+    }
+
+    function finalSubmitMode() {
+      if (quizLocked) return;
+      if (currentMode === 'submit') { processSubmitModeAnswers(); }
+      else { answered.forEach((a, i) => { if (!a) answered[i] = { selected: -1, correct: false, skipped: true }; }); }
+      quizLocked = true;
+      clearInterval(timerInterval);
+      setTimeout(showResult, 400);
+    }
+
+    function processSubmitModeAnswers() {
+      scores = { correct: 0, wrong: 0, marks: 0 };
+      questions.forEach((q, i) => {
+        const sel = selectedOptions[i];
+        if (sel === null) {
+          answered[i] = { selected: -1, correct: false, skipped: true };
+        } else {
+          const isCorrect = sel === q.answer;
+          answered[i] = { selected: sel, correct: isCorrect, skipped: false };
+          const earned = isCorrect ? CORRECT_M : WRONG_M;
+          scores.marks = +((scores.marks + earned).toFixed(10));
+          if (isCorrect) scores.correct++; else scores.wrong++;
+        }
+      });
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ✅ FIXED: revealAnswer — does NOT touch questionText div
+    // Table remains visible because only optionsWrap & answerSection are updated
+    // ════════════════════════════════════════════════════════
+    function revealAnswer(idx, record) {
+      const q = questions[currentQ]; const isCorrect = idx === q.answer;
+      document.querySelectorAll(".option").forEach((o, i) => {
+        o.classList.add("disabled"); o.classList.remove("selected-submit");
+        if (i === q.answer) { o.classList.add("correct"); document.getElementById("icon_" + i).textContent = "✓"; }
+        else if (i === idx && !isCorrect) { o.classList.add("wrong"); document.getElementById("icon_" + i).textContent = "✗"; }
+      });
+      showAnswerBox(isCorrect);
+      if (record && (!answered[currentQ] || answered[currentQ].skipped)) {
+        answered[currentQ] = { selected: idx, correct: isCorrect, skipped: false };
+        const earned = isCorrect ? CORRECT_M : WRONG_M;
+        scores.marks = +((scores.marks + earned).toFixed(10));
+        if (isCorrect) scores.correct++; else scores.wrong++;
+        updateScore(); updateNav();
+      }
+      updateActionBar();
+    }
+
+    function showAnswerBox(isCorrect) {
+      const q = questions[currentQ];
+      let expl = lang === 'hi' ? (q.explanationHindi || q.explanation || '') : (q.explanation || '');
+      expl = expl.replace(/\n/g, '<br>');
+      const parts = expl.split("<br>");
+      const short = parts[0] + (parts[0].endsWith('.') ? '' : '.');
+      const rest = parts.slice(1).join("<br>").trim();
+      const earned = isCorrect ? CORRECT_M : WRONG_M;
+      const badge = document.getElementById("ansMarksBadge");
+      badge.textContent = isCorrect ? `+${CORRECT_M} Marks` : `${earned.toFixed(2)} Marks`;
+      badge.className = "ans-marks-badge " + (isCorrect ? "pos" : "neg");
+      document.getElementById("ansHeaderText").innerHTML = isCorrect ? "✅ &nbsp;सही उत्तर! Correct Answer" : "❌ &nbsp;गलत उत्तर! Wrong Answer";
+      document.getElementById("ansHeader").className = "ans-header " + (isCorrect ? "correct-h" : "wrong-h");
+      document.getElementById("ansShort").textContent = (isCorrect ? "✅ " : "❌ ") + short;
+      document.getElementById("ansDetail").innerHTML = rest;
+      document.getElementById("answerSection").classList.add("show");
+    }
+
+    function hideAnswer() { document.getElementById("answerSection").classList.remove("show"); }
+
+    function nextQuestion() {
+      if (quizLocked) return;
+      if (currentMode === 'submit') {
+        const nextUnattempted = getNextUnattemptedIndex(currentQ);
+        if (nextUnattempted !== -1) { loadQuestion(nextUnattempted); } else { finalSubmitMode(); }
+        return;
+      }
+      if (currentMode === 'haath') {
+        const hasSkip = answered.some(a => !a || a.skipped);
+        if (currentQ < questions.length - 1) { loadQuestion(currentQ + 1); return; }
+        if (hasSkip) {
+          const nextSkip = getNextUnattemptedIndex(currentQ);
+          if (nextSkip !== -1) { loadQuestion(nextSkip); } else { quizLocked = true; clearInterval(timerInterval); setTimeout(showResult, 300); }
+        } else { quizLocked = true; clearInterval(timerInterval); setTimeout(showResult, 300); }
+      }
+    }
+
+    function checkIfAllDone() {
+      if (currentMode === 'haath' && answered.every(a => a && !a.skipped)) {
+        quizLocked = true; clearInterval(timerInterval); setTimeout(showResult, 400);
+      }
+    }
+
+    function updateActionBar() {
+      const nb = document.getElementById("nextBtn");
+      const sk = document.getElementById("skipBtn");
+      const sb = document.getElementById("inlineSubmitBtn");
+      const hint = document.getElementById("modeHint");
+      nb.style.display = "none"; sk.style.display = "none"; sb.style.display = "none"; hint.textContent = "";
+      if (quizLocked) { hint.textContent = "🔒 Quiz जमा हो गई।"; return; }
+      if (currentMode === 'haath') {
+        const isAnswered = answered[currentQ] && !answered[currentQ].skipped;
+        const attempted = answered.filter(a => a && !a.skipped).length;
+        const hasSkip = answered.some(a => !a || a.skipped);
+        sb.style.display = "";
+        sb.textContent = `✅ Submit Quiz (${attempted}/${questions.length})`;
+        sb.disabled = attempted === 0;
+        if (currentQ === questions.length - 1) {
+          if (hasSkip) { nb.style.display = ""; hint.textContent = "⏭ Skipped questions review करें"; }
+          else { nb.style.display = "none"; hint.textContent = "✅ All done — submit कर सकते हैं"; }
+        } else {
+          if (isAnswered) { nb.style.display = ""; hint.textContent = "Next →"; }
+          else { sk.style.display = ""; hint.textContent = "⚡ Option click करते ही Answer दिखेगा"; }
+        }
+      } else {
+        const attempted = selectedOptions.filter(x => x !== null).length;
+        const allDone = attempted === questions.length;
+        if (currentQ === questions.length - 1 && allDone) { nb.style.display = "none"; hint.textContent = "✅ All attempted — submit करें"; }
+        else { nb.style.display = ""; }
+        sk.style.display = ""; sb.style.display = "";
+        sb.textContent = `✅ Submit Quiz (${attempted}/${questions.length})`;
+        sb.disabled = attempted === 0;
+      }
+    }
+
+    async function showResult() {
+      quizDone = true; quizLocked = true; clearInterval(timerInterval);
+      document.getElementById("timerBubble").classList.add("hidden");
+      document.getElementById("fabBtn").style.display = "none";
+      document.getElementById("quizCard").style.display = "none";
+      document.getElementById("qNav").style.display = "none";
+      document.getElementById("scoreBar").style.display = "none";
+      document.getElementById("modeSwitchWrap").classList.remove("visible");
+      document.getElementById("resultScreen").classList.add("show");
+      const total = questions.length, correct = scores.correct, wrong = scores.wrong;
+      const skipped = answered.filter(a => !a || a.skipped).length;
+      const attended = correct + wrong, marks = scores.marks, maxMarks = total * CORRECT_M;
+      const pct = attended > 0 ? Math.round((correct / attended) * 100) : 0;
+      const timeTaken = fmtTime(Math.round((Date.now() - quizStart) / 1000));
+      const rmb = document.getElementById("resultModeBadge");
+      if (currentMode === 'haath') { rmb.className = "result-mode-badge haath"; rmb.textContent = "⚡ हाथो-हाथ Mode में दिया"; }
+      else { rmb.className = "result-mode-badge submit"; rmb.textContent = "📝 Submit Mode में दिया"; }
+      document.getElementById("resultEmoji").textContent = pct >= 75 ? "🏆" : pct >= 50 ? "🎯" : pct >= 25 ? "📚" : "💪";
+      document.getElementById("resultSubtitle").textContent = pct >= 75 ? "शानदार! Excellent!" : pct >= 50 ? "अच्छा प्रयास!" : pct >= 25 ? "मेहनत जारी रखें!" : "हार मत मानो! 💪";
+      document.getElementById("resultBigScore").textContent = marks.toFixed(2);
+      document.getElementById("resultMaxMarks").textContent = maxMarks;
+      document.getElementById("resultOutOf").textContent = `attempted ${attended} / ${total} questions`;
+      document.getElementById("rCorrectFrac").textContent = `${correct} / ${total} Q`;
+      document.getElementById("rWrongFrac").textContent = `${wrong} / ${total} Q`;
+      document.getElementById("rSkipFrac").textContent = `${skipped} / ${total} Q`;
+      document.getElementById("rMarksFrac").textContent = `${marks.toFixed(2)} / ${maxMarks}`;
+      setTimeout(() => document.getElementById("resultPctFill").style.width = Math.max(0, Math.min(100, pct)) + "%", 100);
+      document.getElementById("resultPctLabel").textContent = `${pct}% Accuracy  (${correct} सही / ${wrong} गलत / ${skipped} skip)`;
+      document.getElementById("rCorrect").textContent = correct;
+      document.getElementById("rWrong").textContent = wrong;
+      document.getElementById("rSkip").textContent = skipped;
+      document.getElementById("rMarks").textContent = marks.toFixed(2);
+      document.getElementById("fc-all").textContent = `(${total})`;
+      document.getElementById("fc-correct").textContent = `(${correct})`;
+      document.getElementById("fc-wrong").textContent = `(${wrong})`;
+      document.getElementById("fc-skip").textContent = `(${skipped})`;
+      const statusEl = document.getElementById("resultSendStatus");
+      statusEl.innerHTML = `<span class="status-badge sending"><span class="spinner"></span> Kindly wait, your result is in progress....</span>`;
+      const r = await api({
+        action: "submitResult", testName: TEST_NAME,
+        studentId: student?.id || "unknown", name: student?.name || "unknown", mobile: student?.mobile || "unknown", gender: student?.gender || "unknown",
+        mode: currentMode, correct, wrong, skip: skipped, marks: marks.toFixed(2), maxMarks, accuracy: pct, timeTaken, attended, total
+      });
+      statusEl.innerHTML = r.ok ? `<span class="status-badge sent">✅ Your result is ready</span>` : `<span class="status-badge error">⚠ Submit error — ${r.error || "retry"}</span>`;
+    }
+
+    function filterDetails(type) {
+      const sec = document.getElementById("detailsSection"), bar = document.getElementById("filterBar");
+      if (activeFilter === type && sec.classList.contains("show")) {
+        activeFilter = null; sec.classList.remove("show"); bar.classList.remove("show");
+        clearStatHL(); document.getElementById("btnAllDetails").classList.remove("active"); return;
+      }
+      activeFilter = type; sec.classList.add("show"); bar.classList.add("show");
+      document.querySelectorAll(".btn-filter").forEach(b => b.classList.remove("active"));
+      const fb = document.getElementById("fBtn-" + type); if (fb) fb.classList.add("active");
+      clearStatHL();
+      if (type === "correct") document.getElementById("statCorrect").classList.add("active-filter");
+      else if (type === "wrong") document.getElementById("statWrong").classList.add("active-filter");
+      else if (type === "skip") document.getElementById("statSkip").classList.add("active-filter");
+      document.getElementById("btnAllDetails").classList.toggle("active", type === "all");
+      buildDetails(type);
+      setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+    }
+
+    function clearStatHL() {
+      ["statCorrect", "statWrong", "statSkip"].forEach(id => {
+        const el = document.getElementById(id); if (el) el.classList.remove("active-filter");
+      });
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ✅ FIXED: buildDetails — table questions now render full table HTML
+    // inside detail-q-text div, with all CSS styles applied
+    // ════════════════════════════════════════════════════════
+    function buildDetails(filter = 'all') {
+      const sec = document.getElementById("detailsSection");
+      sec.innerHTML = "";
+      const LBL = ["A", "B", "C", "D"];
+      let count = 0;
+
+      questions.forEach((q, i) => {
+        const a = answered[i];
+        const isSkip = !a || a.skipped;
+        const isCorrect = a && !a.skipped && a.correct;
+        const isWrong = a && !a.skipped && !a.correct;
+        if (filter === "correct" && !isCorrect) return;
+        if (filter === "wrong" && !isWrong) return;
+        if (filter === "skip" && !isSkip) return;
+        count++;
+
+        // ✅ FIXED: Table questions get full table HTML, normal questions get text
+        let questionHTML = '';
+        if (q.type === 'table') {
+          questionHTML = buildTableHTML(q, lang, true);
+        } else {
+          const txt = (lang === 'hi' ? (q.questionHindi || q.question || '') : (q.question || '')).replace(/\n/g, "<br>");
+          questionHTML = txt;
+        }
+
+        const opts = lang === 'hi' ? q.optionsHindi : q.options;
+        let expl = lang === 'hi' ? (q.explanationHindi || q.explanation || '') : (q.explanation || '');
+        expl = expl.replace(/\n/g, '<br>');
+        const earned = isCorrect ? CORRECT_M : isWrong ? WRONG_M : 0;
+
+        let optsHTML = "";
+        opts.forEach((opt, oi) => {
+          let cls = "", note = "";
+          const isAns = oi === q.answer;
+          const isChosen = !isSkip && a.selected === oi;
+          if (isAns && isChosen) { cls = "dco"; note = "✓ सही उत्तर — आपका जवाब"; }
+          else if (isAns) { cls = "dco"; note = "✓ सही उत्तर"; }
+          else if (isChosen) { cls = "dcw"; note = "✗ आपका जवाब (गलत)"; }
+          optsHTML += `<div class="detail-opt ${cls}"><div class="detail-opt-lbl">${LBL[oi]}</div><div><span>${opt}</span>${note ? `<span class="detail-opt-note">${note}</span>` : ""}</div></div>`;
+        });
+
+        const hdrC = isCorrect ? "dc-correct-header" : isWrong ? "dc-wrong-header" : "dc-skip-header";
+        const badgC = isCorrect ? "correct" : isWrong ? "wrong" : "skip";
+        const badgT = isCorrect ? "✓ सही" : isWrong ? "✗ गलत" : "— Skip";
+        const mCls = isCorrect ? "pos" : isWrong ? "neg" : "zero";
+        const mTxt = isCorrect ? `+${CORRECT_M}` : isWrong ? earned.toFixed(2) : "0";
+        const typeTag = q.type === 'table'
+          ? '<span style="background:var(--accent);color:#0f1117;font-size:0.65rem;padding:1px 7px;border-radius:8px;font-family:Rajdhani,sans-serif;font-weight:700;margin-left:6px;">📊 TABLE</span>'
+          : '';
+
+        sec.innerHTML += `
+          <div class="detail-card">
+            <div class="detail-card-header ${hdrC}">
+              <span class="dc-qnum">Q ${i + 1}${typeTag}</span>
+              <span class="dc-result-badge ${badgC}">${badgT}</span>
+              <span class="dc-marks ${mCls}">${mTxt} pts</span>
+            </div>
+            <div class="detail-q-text">${questionHTML}</div>
+            <div class="detail-opts">${optsHTML}</div>
+            <div class="detail-expl"><strong>📝 Explanation</strong>${expl}</div>
+          </div>`;
+      });
+
+      if (count === 0) {
+        const msgs = { correct: "कोई सही जवाब नहीं 😅", wrong: "कोई गलत जवाब नहीं 🎉", skip: "कोई skip नहीं 👍" };
+        sec.innerHTML = `<div class="no-filter-result"><div class="nfr-icon">📭</div><div>${msgs[filter] || "कोई data नहीं"}</div></div>`;
+      }
+      sec.innerHTML += `<div style="text-align:center;padding:24px 0 8px;"><button class="btn-re-attempt" onclick="reAttempt()" style="padding:14px 40px;font-size:1rem;">🔄 Re-Attempt Quiz</button></div>`;
+    }
+
+    function reAttempt() {
+      document.getElementById("fabBtn").style.display = "";
+      document.getElementById("fabBtn").className = "fab-btn on";
+      document.getElementById("timerBubble").classList.remove("hidden");
+      document.getElementById("modeSwitchWrap").classList.add("visible");
+      timerOn = true; initQuiz();
+    }
+
+    function setLang(l) {
+      lang = l;
+      document.getElementById("btnEN").classList.toggle("active", l === "en");
+      document.getElementById("btnHI").classList.toggle("active", l === "hi");
+      // ✅ Re-render question (includes table if applicable)
+      renderQuestion();
+      renderOptions();
+      if (currentMode === 'haath' && answered[currentQ] && !answered[currentQ].skipped) {
+        revealAnswer(answered[currentQ].selected, false);
+      }
+      if (activeFilter !== null) buildDetails(activeFilter);
+    }
+
+    function downloadMCQs() {
+      if (!student || student.mobile !== "9649346723") return;
+      const blob = new Blob([JSON.stringify(questions, null, 2)], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "mcq_questions.txt";
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    function handleDownloadClick(e) {
+      e.stopPropagation(); e.preventDefault();
+      if (!student || student.mobile !== "9649346723") return;
+      downloadMCQs();
+    }
+
+    function joinWhatsApp() {
+      const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+      if (student?.gender === "girls") {
+        const msg = encodeURIComponent(`🙏 Sir ji,\n\nMujhe WhatsApp group join karna hai.\n\n━━━━━━━━━━━━━━━\n👤 Name: ${student?.name || ""}\n⚧ Gender: ${student?.gender || ""}\n📱 Mobile: ${student?.mobile || ""}\n🕐 Time: ${now}\n🎓 Test: ${TEST_NAME}\n━━━━━━━━━━━━━━━`);
+        window.open(`https://wa.me/919649346723?text=${msg}`, "_blank");
+      } else {
+        window.open("https://chat.whatsapp.com/DVqpQQvYJZo1SC4ch6pRbS", "_blank");
+      }
+    }
+
+    function joinTelegram() {
+      const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+      const msg = encodeURIComponent(`🙏 Sir ji,\n\nMujhe Telegram group join karna hai.\n\n━━━━━━━━━━━━━━━\n👤 Name: ${student?.name || ""}\n⚧ Gender: ${student?.gender || ""}\n📱 Mobile: ${student?.mobile || ""}\n🕐 Time: ${now}\n🎓 Test: ${TEST_NAME}\n━━━━━━━━━━━━━━━`);
+      if (student?.gender === "girls") {
+        window.open(`https://t.me/IASDineshsharma?text=${msg}`, "_blank");
+      } else {
+        window.open("https://t.me/+65gnlpAsWaYxNTM1", "_blank");
+      }
+    }
+
+    function onAutoNextChange(el) {
+      autoNextEnabled = el.checked;
+      const lbl = document.getElementById('autoNextLabel');
+      if (lbl) lbl.classList.toggle('on', autoNextEnabled);
+    }
+    function copyGirlsNumber() {
+      const num = window._girlsNum || "";
+      if (!num) return;
+      const btn = document.getElementById("gcCopyBtn");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(num).then(() => {
+          if (btn) { btn.innerHTML = "✅ Copied!"; btn.style.borderColor = "#22c55e66"; btn.style.color = "#22c55e"; setTimeout(() => { btn.innerHTML = "📋 Copy Number"; btn.style.borderColor = "#fbbf2466"; btn.style.color = "#fbbf24"; }, 2000); }
+        }).catch(() => fallbackCopy(num, btn));
+      } else {
+        fallbackCopy(num, btn);
+      }
+    }
+
+    function fallbackCopy(num, btn) {
+      const ta = document.createElement("textarea");
+      ta.value = num;
+      ta.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0;";
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try {
+        document.execCommand("copy");
+        if (btn) { btn.innerHTML = "✅ Copied!"; btn.style.borderColor = "#22c55e66"; btn.style.color = "#22c55e"; setTimeout(() => { btn.innerHTML = "📋 Copy Number"; btn.style.borderColor = "#fbbf2466"; btn.style.color = "#fbbf24"; }, 2000); }
+      } catch (e) { if (btn) { btn.innerHTML = "❌ Try Again"; setTimeout(() => { btn.innerHTML = "📋 Copy Number"; }, 2000); } }
+      document.body.removeChild(ta);
+    }
+
+
+
+    // ════ COPY PROTECTION ════
+    // ════ COPY PROTECTION ════
+    (function () {
+
+      function isEditableTarget(el) {
+        if (!el) return false;
+        const tag = (el.tagName || "").toLowerCase();
+        if (tag === "input" || tag === "textarea") return true;
+        if (el.isContentEditable) return true;
+        if (el.id === "gcCopyBtn" || (el.closest && el.closest("#gcCopyBtn"))) return true;
+        return false;
+      }
+
+      // Girls ke liye canvas number box ko bhi protect karo
+      function isCanvasOrProtected(el) {
+        if (!el) return false;
+        if (el.id === "gcCopyBtn" || (el.closest && el.closest("#gcCopyBtn"))) return false;
+        if (el.tagName === "CANVAS") return true;
+        if (el.id === "girlsContactNum") return true;
+        if (el.closest && el.closest("#girlsContactNum")) return true;
+        return false;
+      }
+      const style = document.createElement("style");
+      style.type = "text/css";
+      style.textContent = `
+    * { -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; user-select: none !important; }
+    input, textarea, [contenteditable="true"] { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }
+    #girlsContactNum { -webkit-user-select: none !important; -moz-user-select: none !important; user-select: none !important; }
+    #girlsContactNum *:not(#gcCopyBtn):not(#gcCopyBtn *) { -webkit-user-select: none !important; -moz-user-select: none !important; user-select: none !important; pointer-events: none !important; }
+    #gcCopyBtn { pointer-events: auto !important; cursor: pointer !important; -webkit-user-select: none !important; user-select: none !important; }
+    #gcNumCanvas { pointer-events: none !important; -webkit-user-select: none !important; user-select: none !important; }
+  `;
+      document.head && document.head.appendChild(style);
+
+      document.addEventListener("selectstart", function (e) {
+        if (isEditableTarget(e.target)) return;
+        e.preventDefault(); return false;
+      }, true);
+
+      document.addEventListener("contextmenu", function (e) {
+        if (isEditableTarget(e.target)) return;
+        e.preventDefault(); return false;
+      }, true);
+
+      document.addEventListener("dragstart", function (e) {
+        if (isEditableTarget(e.target)) return;
+        e.preventDefault(); return false;
+      }, true);
+
+      ["copy", "cut", "paste"].forEach(function (evt) {
+        document.addEventListener(evt, function (e) {
+          if (isEditableTarget(e.target)) return;
+          e.preventDefault(); return false;
+        }, true);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        const active = document.activeElement;
+        if (isEditableTarget(active)) return;
+        const key = (e.key || "").toLowerCase();
+        const isCtrl = e.ctrlKey || e.metaKey;
+        const isShift = e.shiftKey;
+        if (e.keyCode === 123) { e.preventDefault(); return false; }
+        const blockedCombos = ["c", "x", "v", "u", "s", "a", "p", "j", "i"];
+        if (isCtrl && blockedCombos.includes(key)) { e.preventDefault(); return false; }
+        if (isCtrl && isShift && (key === "i" || key === "j" || key === "c")) { e.preventDefault(); return false; }
+      }, true);
+
+      document.addEventListener("selectionchange", function () {
+        try {
+          const sel = window.getSelection();
+          if (!sel || sel.isCollapsed) return;
+          const anchorNode = sel.anchorNode?.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode;
+          const focusNode = sel.focusNode?.nodeType === 3 ? sel.focusNode.parentNode : sel.focusNode;
+          if (isEditableTarget(anchorNode) || isEditableTarget(focusNode)) return;
+          sel.removeAllRanges();
+        } catch (err) { }
+      }, true);
+
+      function clearSelectionIfNotEditable(e) {
+        if (isEditableTarget(e.target)) return;
+        try { const sel = window.getSelection(); sel && sel.removeAllRanges(); } catch (err) { }
+      }
+      document.addEventListener("mouseup", clearSelectionIfNotEditable, true);
+      document.addEventListener("touchend", clearSelectionIfNotEditable, true);
+
+      // ══ Girls number box — extra touch/long-press protection ══
+      document.addEventListener("touchstart", function (e) {
+        if (isCanvasOrProtected(e.target)) {
+          e.preventDefault(); return false;
+        }
+      }, { passive: false, capture: true });
+
+      document.addEventListener("touchmove", function (e) {
+        if (isCanvasOrProtected(e.target)) {
+          e.preventDefault(); return false;
+        }
+      }, { passive: false, capture: true });
+
+      // Long-press screenshot/save block on canvas
+      document.addEventListener("pointerdown", function (e) {
+        if (isCanvasOrProtected(e.target)) {
+          e.preventDefault(); return false;
+        }
+      }, { capture: true });
+
+      // MutationObserver — jab bhi girlsContactNum DOM mein aaye, turant protect karo
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+          m.addedNodes.forEach(function (node) {
+            if (!node.id) return;
+            if (node.id === "girlsContactNum" || node.id === "gcNumCanvas") {
+              node.style.cssText += ";pointer-events:none!important;-webkit-user-select:none!important;user-select:none!important;";
+              node.addEventListener("contextmenu", function (e) { e.preventDefault(); }, true);
+              node.addEventListener("selectstart", function (e) { e.preventDefault(); }, true);
+              node.addEventListener("copy", function (e) { e.preventDefault(); }, true);
+              // Disable screenshot via Print Screen key on focused element
+              node.setAttribute("draggable", "false");
+            }
+          });
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      const clearIntervalHandle = setInterval(function () {
+        try {
+          const sel = window.getSelection();
+          if (sel && !sel.isCollapsed) {
+            const node = sel.anchorNode?.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode;
+            if (!isEditableTarget(node)) sel.removeAllRanges();
+          }
+        } catch (e) { }
+      }, 150);
+
+      window.addEventListener("beforeunload", function () {
+        clearInterval(clearIntervalHandle);
+        observer.disconnect();
+      });
+
+    })();
+
+    function openPdfPopup() {
+      pdfLang = lang; // quiz ki current language se sync
+      document.getElementById('pdfPopupOverlay').style.display = 'block';
+      updatePdfLangUI();
+    }
+
+    function setPdfLang(l) {
+      pdfLang = l;
+      updatePdfLangUI();
+    }
+
+    function updatePdfLangUI() {
+      ['hi', 'en', 'bi'].forEach(l => {
+        const btn = document.getElementById('pdfLang' + l.toUpperCase());
+        if (!btn) return;
+        if (l === pdfLang) {
+          btn.style.background = '#f59e0b';
+          btn.style.color = '#0f1117';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = '#8892b0';
+        }
+      });
+    }
+    function closePdfPopup() {
+      document.getElementById('pdfPopupOverlay').style.display = 'none';
+    }
+
+    function downloadPDF(type) {
+      const withAnswer = type !== 'all_noanswer';
+      const showExplOnly = type === 'all_withexpl'; // sirf explanation, result nahi
+      const OPTS = ['A', 'B', 'C', 'D'];
+      const typeLabel = {
+        all_noanswer: 'All MCQs (Without Answer)',
+        all_answer: 'All Questions with Answer',
+        correct_answer: 'Correct Questions Only',
+        wrong_answer: 'Wrong Questions Only',
+        skip_answer: 'Skipped Questions Only',
+        all_withexpl: 'All MCQs with Explanation',
+      };
+
+      let qList = [];
+      if (type === 'all_noanswer' || type === 'all_answer' || type === 'all_withexpl') {
+        qList = questions.map((q, i) => ({ q, i, a: answered[i] }));
+      } else if (type === 'correct_answer') {
+        qList = questions.map((q, i) => ({ q, i, a: answered[i] })).filter(x => x.a && !x.a.skipped && x.a.correct);
+      } else if (type === 'wrong_answer') {
+        qList = questions.map((q, i) => ({ q, i, a: answered[i] })).filter(x => x.a && !x.a.skipped && !x.a.correct);
+      } else if (type === 'skip_answer') {
+        qList = questions.map((q, i) => ({ q, i, a: answered[i] })).filter(x => !x.a || x.a.skipped);
+      }
+
+      // ── Build question HTML ──
+      function getQText(q) {
+        if (pdfLang === 'hi') return (q.questionHindi || q.question || '');
+        if (pdfLang === 'en') return (q.question || '');
+        return (q.question || '') + '\n\n' + (q.questionHindi || '');
+      }
+      function getOpts(q) {
+        if (pdfLang === 'hi') return q.optionsHindi || q.options || [];
+        if (pdfLang === 'en') return q.options || [];
+        return (q.options || []).map((o, i) => o + ' / ' + ((q.optionsHindi || [])[i] || ''));
+      }
+      function getExpl(q) {
+        if (pdfLang === 'hi') return q.explanationHindi || q.explanation || '';
+        if (pdfLang === 'en') return q.explanation || '';
+        return (q.explanation || '') + '\n\n' + (q.explanationHindi || '');
+      }
+      function getTableHTML(q) {
+        const headers = pdfLang === 'hi' ? (q.tableHeadersHindi || q.tableHeaders) : q.tableHeaders;
+        const rows = q.tableRows;
+        let th = headers.map(h => `<th>${h}</th>`).join('');
+        let tbody = rows.map(row => {
+          const cells = pdfLang === 'hi' ? row.hi : pdfLang === 'en' ? row.en : row.en;
+          const tds = cells.map((c, ci) => `<td${ci === 0 ? ' class="rn"' : ''}>${c}</td>`).join('');
+          // bilingual: add hindi row below
+          if (pdfLang === 'bi') {
+            const hiCells = row.hi.map((c, ci) => `<td${ci === 0 ? ' class="rn"' : ''} style="color:#94a3b8;font-size:11px;">${c}</td>`).join('');
+            return `<tr>${tds}</tr><tr>${hiCells}</tr>`;
+          }
+          return `<tr>${tds}</tr>`;
+        }).join('');
+        return `<table class="mcq-tbl"><thead><tr>${th}</tr></thead><tbody>${tbody}</tbody></table>`;
+      }
+
+      let questionsHTML = '';
+      if (qList.length === 0) {
+        questionsHTML = `<div style="text-align:center;padding:40px;color:#ef4444;font-size:16px;">Is category mein koi question nahi mila.</div>`;
+      }
+
+      qList.forEach(({ q, i, a }, idx) => {
+        const isSkip = !a || a.skipped;
+        const isCorrect = a && !a.skipped && a.correct;
+        const isWrong = a && !a.skipped && !a.correct;
+        const badgeColor = isSkip ? '#64748b' : isCorrect ? '#22c55e' : '#ef4444';
+        const badgeText = isSkip ? 'SKIP' : isCorrect ? '✓ SAHI' : '✗ GALAT';
+        const opts = getOpts(q);
+        const expl = getExpl(q);
+
+        // Question text
+        let qTextHTML = '';
+        if (q.type === 'table') {
+          const qLines = getQText(q).split('\n');
+          const intro = qLines.slice(0, -1).join('\n');
+          const ask = qLines[qLines.length - 1];
+          if (pdfLang === 'bi') {
+            const hiLines = (q.questionHindi || '').split('\n');
+            const hiIntro = hiLines.slice(0, -1).join('\n');
+            const hiAsk = hiLines[hiLines.length - 1];
+            qTextHTML = `<div class="q-intro">${(q.question || '').split('\n').slice(0, -1).join('<br>')}</div>
+                     <div class="q-intro hi-text">${hiIntro.replace(/\n/g, '<br>')}</div>
+                     ${getTableHTML(q)}
+                     <div class="q-ask">${(q.question || '').split('\n').pop()}</div>
+                     <div class="q-ask hi-text">${hiAsk}</div>`;
+          } else {
+            qTextHTML = `<div class="q-intro">${intro.replace(/\n/g, '<br>')}</div>
+                     ${getTableHTML(q)}
+                     <div class="q-ask">${ask}</div>`;
+          }
+        } else {
+          if (pdfLang === 'bi') {
+            qTextHTML = `<div>${(q.question || '').replace(/\n/g, '<br>')}</div>
+                     <div class="hi-text" style="margin-top:6px;">${(q.questionHindi || '').replace(/\n/g, '<br>')}</div>`;
+          } else {
+            qTextHTML = `<div>${getQText(q).replace(/\n/g, '<br>')}</div>`;
+          }
+        }
+
+        // Options
+        let optsHTML = opts.map((opt, oi) => {
+          let cls = 'opt-row';
+          let note = '';
+          if (showExplOnly) {
+            if (oi === q.answer) { cls += ' opt-correct'; note = ' ✓ Sahi Jawab'; }
+          } else if (withAnswer && a && !a.skipped) {
+            if (oi === q.answer && oi === a.selected) { cls += ' opt-correct'; note = ' ✓ Sahi — Aapka jawab'; }
+            else if (oi === q.answer) { cls += ' opt-correct'; note = ' ✓ Sahi Jawab'; }
+            else if (oi === a.selected) { cls += ' opt-wrong'; note = ' ✗ Aapka jawab (galat)'; }
+          }
+          return `<div class="${cls}"><span class="opt-lbl">${OPTS[oi]}</span><span class="opt-txt">${opt}${note ? `<span class="opt-note">${note}</span>` : ''}</span></div>`;
+        }).join('');
+
+        // Explanation
+        let explHTML = '';
+        if (withAnswer && expl) {
+          explHTML = `<div class="expl-box"><div class="expl-title">📝 Explanation</div><div class="expl-body">${expl.replace(/\n/g, '<br>')}</div></div>`;
+        }
+
+        const resultBadge = (withAnswer && !showExplOnly && a) ? `<span class="result-badge" style="background:${badgeColor}">${badgeText}</span>` : '';
+
+        questionsHTML += `
+      <div class="q-card">
+        <div class="q-header">
+          <span class="q-num">Q ${i + 1}</span>
+          ${q.type === 'table' ? '<span class="tbl-badge">📊 TABLE</span>' : ''}
+          ${resultBadge}
+        </div>
+        <div class="q-body">${qTextHTML}</div>
+        <div class="opts-wrap">${optsHTML}</div>
+        ${explHTML}
+      </div>`;
+      });
+
+      const langLabel = pdfLang === 'hi' ? '🇮🇳 Hindi' : pdfLang === 'en' ? '🇬🇧 English' : '🔀 Bilingual';
+
+      const htmlContent = `<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>UPSC MCQ PDF</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif; background: #fff; color: #1e293b; font-size: 13px; line-height: 1.7; }
+  .pdf-header { background: #1e2a4a; color: #fbbf24; text-align: center; padding: 18px 20px 14px; }
+  .pdf-header h1 { font-size: 20px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+  .pdf-header .sub { color: #94a3b8; font-size: 12px; }
+  .pdf-header .lang-badge { display:inline-block; background:#f59e0b; color:#0f1117; border-radius:20px; padding:2px 12px; font-size:11px; font-weight:700; margin-top:6px; }
+  .content { padding: 16px 20px; }
+  .q-card { border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 16px; overflow: hidden; page-break-inside: avoid; }
+  .q-header { background: #f1f5f9; padding: 8px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e2e8f0; }
+  .q-num { background: #f59e0b; color: #fff; font-weight: 700; font-size: 11px; padding: 2px 10px; border-radius: 20px; }
+  .tbl-badge { background: #3b82f6; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+  .result-badge { margin-left: auto; font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 700; color: #fff; }
+  .q-body { padding: 12px 14px 8px; font-size: 13px; color: #1e293b; }
+  .hi-text { color: #475569; font-size: 12px; }
+  .q-intro { margin-bottom: 8px; }
+  .q-ask { margin-top: 8px; padding: 7px 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 3px; font-weight: 600; }
+  .mcq-tbl { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+  .mcq-tbl thead { background: #1e2a4a; color: #fbbf24; }
+  .mcq-tbl th { padding: 8px 8px; text-align: left; border-right: 1px solid #334155; font-weight: 700; }
+  .mcq-tbl td { padding: 7px 8px; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+  .mcq-tbl .rn { background: #f8fafc; font-weight: 700; color: #f59e0b; text-align: center; min-width: 30px; }
+  .opts-wrap { padding: 6px 14px 12px; }
+  .opt-row { display: flex; align-items: flex-start; gap: 8px; padding: 6px 8px; border-radius: 6px; margin-bottom: 4px; border: 1px solid #e2e8f0; }
+  .opt-correct { background: #f0fdf4; border-color: #22c55e; }
+  .opt-wrong { background: #fef2f2; border-color: #ef4444; }
+  .opt-lbl { width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+  .opt-correct .opt-lbl { background: #22c55e; color: #fff; }
+  .opt-wrong .opt-lbl { background: #ef4444; color: #fff; }
+  .opt-txt { flex: 1; font-size: 12.5px; }
+  .opt-note { display: block; font-size: 10.5px; color: #64748b; margin-top: 2px; }
+  .expl-box { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 10px 14px; }
+  .expl-title { font-weight: 700; color: #f59e0b; margin-bottom: 5px; font-size: 12px; }
+  .expl-body { color: #475569; font-size: 12px; line-height: 1.7; }
+  .footer { background: #1e2a4a; color: #94a3b8; text-align: center; padding: 16px; margin-top: 20px; font-size: 11px; }
+  .footer h3 { color: #fbbf24; font-size: 14px; margin-bottom: 6px; }
+  .footer .links { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+  .footer .lnk { background: #ff4d8d; border-radius: 8px; padding: 8px 18px; color: #fff; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-block; }
+.footer .lnk:hover { background: #ff2e7a; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .q-card { page-break-inside: avoid; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="pdf-header">
+  <h1>📚 UPSC MCQ Practice Test</h1>
+  <div class="sub">${typeLabel[type]} &nbsp;|&nbsp; ${TEST_NAME} &nbsp;|&nbsp; ${new Date().toLocaleDateString('en-IN')}</div>
+  <div class="lang-badge">${langLabel}</div>
+</div>
+<div class="content no-print" style="text-align:center;padding:12px;background:#fffbeb;border-bottom:1px solid #fde68a;">
+  <strong>👉 PDF save karne ke liye:</strong> Ctrl+P → "Save as PDF" choose karein &nbsp;|&nbsp;
+  <button onclick="window.print()" style="background:#f59e0b;border:none;padding:6px 18px;border-radius:6px;font-weight:700;cursor:pointer;">🖨️ Print / Save PDF</button>
+&nbsp;
+<button onclick="window.close()" style="background:#ef4444;border:none;padding:6px 18px;border-radius:6px;font-weight:700;cursor:pointer;color:#fff;">✕ Close / Back</button>
+</div>
+<div class="content">${questionsHTML}</div>
+<div class="footer">
+  <h3>🚀 Join Our Premium Study Group</h3>
+  <div>Daily Test + PDF Notes + Rank + Discussion</div>
+ <div class="links">
+    <a class="lnk" href="https://chat.whatsapp.com/BBccHhpacnK5ObMxDUrn02" target="_blank">💬 WhatsApp Join करें</a>
+    <a class="lnk" href="https://t.me/Test_Series_All" target="_blank">📲 Telegram Join करें</a>
+  </div>
+</div>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.open();
+        win.document.write(htmlContent);
+        win.document.close();
+        setTimeout(() => { try { win.print(); } catch (e) { } }, 1200);
+      } else {
+        // Popup blocked hone par direct download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'UPSC_MCQ_' + type + '_' + new Date().toISOString().slice(0, 10) + '.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      }
+      closePdfPopup();
+    }
+  </script>
+</body>
+
+</html>
