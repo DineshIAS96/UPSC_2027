@@ -3145,8 +3145,16 @@
     const TEST_NAME = "6th His 1st chapter";
 
     // ════ MULTI-TEST JSON CONFIG ════
-    // GitHub ke isi folder me "tests.json" naam ki file daalo
-    const TESTS_JSON_URL = "./tests.json";
+    // ✅ Ab kisi bhi naam ki .json file chalegi — repo ke andar jitni bhi .json
+    // files hongi (tests.json, test.json, quiz1.json, kuch_bhi.json...) sabko
+    // GitHub API se dhoond kar automatically load kar lega.
+    function getRepoInfoFromLocation() {
+      const host = window.location.hostname; // e.g. dineshias96.github.io
+      const owner = host.split('.')[0];
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const repo = pathParts[0] || '';
+      return { owner, repo };
+    }
 
     const CORRECT_M = 2;
     const WRONG_M = -(2 / 3);
@@ -3536,13 +3544,55 @@
     // ════ MULTI-TEST JSON HELPERS ════
     async function fetchAllTestsJSON() {
       if (allTestsData.length) return allTestsData; // ek baar load ho gaya to dobara mat karo
+
+      let jsonFileNames = [];
+
+      // ✅ Step A: GitHub API se repo ke root me jitni bhi .json files hain, unki list nikaalo
       try {
-        const res = await fetch(TESTS_JSON_URL, { cache: "no-store" });
-        allTestsData = await res.json();
+        const { owner, repo } = getRepoInfoFromLocation();
+        if (owner && repo) {
+          const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/`;
+          const res = await fetch(apiUrl, { cache: "no-store" });
+          if (res.ok) {
+            const list = await res.json();
+            if (Array.isArray(list)) {
+              jsonFileNames = list
+                .filter(f => f.type === "file" && f.name.toLowerCase().endsWith(".json"))
+                .map(f => f.name);
+            }
+          }
+        }
       } catch (e) {
-        allTestsData = [];
-        console.log("tests.json load nahi hui:", e);
+        console.log("GitHub file-list API fail hui:", e);
       }
+
+      // ✅ Step B: Agar API fail ho jaaye (rate-limit / private repo) to purane common naam try karo
+      if (jsonFileNames.length === 0) {
+        jsonFileNames = ["tests.json", "test.json"];
+      }
+
+      // ✅ Step C: Har .json file fetch karo aur sabke tests ek list me merge karo
+      let merged = [];
+      for (const fname of jsonFileNames) {
+        try {
+          const r = await fetch("./" + fname, { cache: "no-store" });
+          if (!r.ok) continue;
+          const data = await r.json();
+
+          // File ek array ho sakti hai [ {...}, {...} ] ya { tests: [...] } ya seedha ek test object
+          const arr = Array.isArray(data) ? data : (Array.isArray(data.tests) ? data.tests : [data]);
+
+          arr.forEach((t, idx) => {
+            if (!t || !t.questions) return; // jo entries valid test nahi hain unhe skip karo
+            if (!t.id) t.id = fname.replace(/\.json$/i, "") + "_" + idx; // id na ho to auto bana do
+            merged.push(t);
+          });
+        } catch (e) {
+          console.log("File load nahi hui:", fname, e);
+        }
+      }
+
+      allTestsData = merged;
       return allTestsData;
     }
 
